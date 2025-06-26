@@ -4,7 +4,7 @@
 
 
 
-tSCORE      mySCORE = { NULL, "", "", "", "", "" };
+tSCORE      mySCORE = { NULL, -1, "", "", "", "", "" };
 char        g_print     [LEN_RECD]  = "";
 
 
@@ -130,105 +130,6 @@ static void      o___HELPERS____________o (void) {;}
 /*===----                       marking scores                         ----===*/
 /*====================------------------------------------====================*/
 static void      o___MARKING_______o (void) {;};
-
-char
-yenv_score__mark         (tSCORE_TABLE *a_table, char a_label [LEN_TERSE], uchar a_mark, char b_terse [LEN_FULL], char b_score [LEN_FULL], char b_report [LEN_FULL])
-{
-   /*---(locals)-----------+-----+-----+-*/
-   char        rce         =  -10;
-   char        rc          =    0;
-   short       t           =   -1;
-   short       s           =   -1;
-   short       r           =   -1;
-   /*---(header)-------------------------*/
-   DEBUG_YENV   yLOG_enter   (__FUNCTION__);
-   /*---(defense)------------------------*/
-   DEBUG_YENV   yLOG_point   ("a_table"   , a_table);
-   --rce;  if (a_table == NULL) {
-      yURG_err ('w', "scoring mark å%sæ, called without scoring table", a_label);
-      DEBUG_YENV   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   DEBUG_YENV   yLOG_value   ("a_mark"    , a_mark);
-   --rce;  if (a_mark    <= 32 || (a_mark >= 127 && a_mark <= 159)) {
-      yURG_err ('w', "scoring mark å%sæ, called with illegal value (%3d)", a_label, a_mark);
-      DEBUG_YENV    yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   DEBUG_YENV   yLOG_char    ("a_mark"    , a_mark);
-   /*---(position)-----------------------*/
-   rc = yscore_pos (a_table, a_label, &t, &s, &r, NULL);
-   DEBUG_YENV   yLOG_value   ("pos"       , rc);
-   --rce;  if (rc < 0) {
-      yURG_err ('w', "scoring mark å%sæ, label does not exist in scoring table", a_label);
-      DEBUG_YENV    yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(update terse)-------------------*/
-   if (b_terse != NULL) {
-      DEBUG_YENV   yLOG_value   ("t"         , t);
-      b_terse  [t] = a_mark;
-      DEBUG_YENV   yLOG_info    ("b_terse"   , b_terse);
-   }
-   /*---(update score)-------------------*/
-   if (b_score != NULL) {
-      DEBUG_YENV   yLOG_value   ("s"         , s);
-      b_score  [s] = a_mark;
-      DEBUG_YENV   yLOG_info    ("b_score"   , b_score);
-   }
-   /*---(update report)------------------*/
-   if (b_report != NULL) {
-      DEBUG_YENV   yLOG_value   ("r"         , r);
-      b_report [r] = a_mark;
-      DEBUG_YENV   yLOG_info    ("b_report"  , b_report);
-   }
-   /*---(complete)-----------------------*/
-   DEBUG_YENV    yLOG_exit    (__FUNCTION__);
-   return 0;
-}
-
-char yENV_score_mark    (char a_label [LEN_TERSE], uchar a_mark)  { return yenv_score__mark  (mySCORE.m_table , a_label, a_mark, mySCORE.o_terse, mySCORE.o_score, mySCORE.o_report); }
-
-char
-yenv_score__value       (tSCORE_TABLE *a_table, char a_label [LEN_TERSE], char a_score [LEN_FULL])
-{
-   /*---(locals)-----------+-----+-----+-*/
-   char        rce         =  -10;
-   char        rc          =    0;
-   short       s           =   -1;
-   char        x_value     =  '-';
-   /*---(header)-------------------------*/
-   DEBUG_YENV   yLOG_enter   (__FUNCTION__);
-   /*---(defense)------------------------*/
-   DEBUG_YENV   yLOG_point   ("a_table"   , a_table);
-   --rce;  if (a_table == NULL) {
-      yURG_err ('w', "scoring value å%sæ, called without scoring table", a_label);
-      DEBUG_YENV   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   DEBUG_YENV   yLOG_point   ("a_score"   , a_score);
-   --rce;  if (a_score == NULL) {
-      DEBUG_YENV   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(position)-----------------------*/
-   rc = yscore_pos (a_table, a_label, NULL, &s, NULL, NULL);
-   DEBUG_YENV   yLOG_value   ("pos"       , rc);
-   --rce;  if (rc < 0) {
-      yURG_err ('w', "scoring value å%sæ, label does not exist in scoring table", a_label);
-      DEBUG_YENV    yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   DEBUG_YENV   yLOG_value   ("s"         , s);
-   /*---(value)--------------------------*/
-   x_value = a_score [s];
-   DEBUG_YENV   yLOG_value   ("x_value"   , x_value);
-   /*---(complete)-----------------------*/
-   DEBUG_YENV    yLOG_exit    (__FUNCTION__);
-   return x_value;
-}
-
-char yENV_score_value  (char a_label [LEN_TERSE])  { return yenv_score__value (mySCORE.m_table , a_label, mySCORE.o_score); }
 
 
 
@@ -390,12 +291,12 @@ yenv_score__mask        (tSCORE_TABLE *a_table, char a_beg [LEN_TERSE], char a_e
       yURG_err ('w', "scoring mask called without scoring table");
       return rce;
    }
-   rc = yscore_pos (a_table, a_beg, &bt, &bs, &br, NULL);
+   rc = yscore_pos (a_table, 0, a_beg, NULL, &bt, &bs, &br, NULL);
    --rce;  if (rc < 0 || bs < 0) {
       yURG_err ('w', "scoring mask å%sæ, begin label does not exist in scoring table", a_beg);
       return rce;
    }
-   rc = yscore_pos (a_table, a_end, &et, &es, &er, NULL);
+   rc = yscore_pos (a_table, 0, a_end, NULL, &et, &es, &er, NULL);
    --rce;  if (rc < 0 || es < 0) {
       yURG_err ('w', "scoring mask å%sæ, ending label does not exist in scoring table", a_end);
       return rce;
@@ -794,7 +695,7 @@ yenv_score__legend      (tSCORE_TABLE *a_table, char a_line, char a_label [LEN_T
       return "(count < 1)";
    }
    /*---(start)--------------------------*/
-   rc = yscore_pos (a_table, a_table [x_beg].s_label, &x_off, NULL, NULL, NULL);
+   rc = yscore_pos (a_table, 0, a_table [x_beg].s_label, NULL, &x_off, NULL, NULL, NULL);
    DEBUG_YENV   yLOG_value   ("pos"       , rc);
    --rce;  if (rc < 0) {
       DEBUG_YENV   yLOG_exitr   (__FUNCTION__, rce);

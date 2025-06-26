@@ -51,8 +51,8 @@ char*       ySCORE_poly             (void);
 
 
 
-char        yENV_score_mark         (char a_label [LEN_TERSE], uchar a_mark);
-char        yENV_score_value        (char a_label [LEN_TERSE]);
+char        ySCORE_mark             (char a_label [LEN_TERSE], uchar a_mark);
+char        ySCORE_value            (char a_label [LEN_TERSE]);
 
 char*       yENV_score_title        (char a_type);
 char*       yENV_score_header       (char n);

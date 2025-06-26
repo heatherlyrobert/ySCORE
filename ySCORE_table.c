@@ -14,7 +14,7 @@ ySCORE_init             (tSCORE_TABLE *a_table)
 }
 
 char
-yscore_clear            (tSCORE_TABLE *a_table, char r_terse [LEN_FULL], char r_score [LEN_FULL], char r_full [LEN_FULL], char r_report [LEN_FULL], char r_poly [LEN_FULL])
+yscore_clear            (tSCORE_TABLE *a_table, short *r_max, char r_terse [LEN_FULL], char r_score [LEN_FULL], char r_full [LEN_FULL], char r_report [LEN_FULL], char r_poly [LEN_FULL])
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -33,6 +33,7 @@ yscore_clear            (tSCORE_TABLE *a_table, char r_terse [LEN_FULL], char r_
    /*---(header)-------------------------*/
    DEBUG_YENV   yLOG_senter  (__FUNCTION__);
    /*---(default)------------------------*/
+   if (r_max    != NULL)  *r_max  = -1;
    if (r_terse  != NULL)  strlcpy (r_terse , "", LEN_FULL);
    if (r_score  != NULL)  strlcpy (r_score , "", LEN_FULL);
    if (r_full   != NULL)  strlcpy (r_full  , "", LEN_FULL);
@@ -92,6 +93,7 @@ yscore_clear            (tSCORE_TABLE *a_table, char r_terse [LEN_FULL], char r_
    /*---(finish)-------------------------*/
    strlcat (x_poly, "æ", LEN_FULL);
    /*---(save-back)----------------------*/
+   if (r_max    != NULL)  *r_max  = i;
    if (r_terse  != NULL)  strlcpy (r_terse , x_terse , LEN_FULL);
    if (r_score  != NULL)  strlcpy (r_score , x_score , LEN_FULL);
    if (r_full   != NULL)  strlcpy (r_full  , x_full  , LEN_FULL);
@@ -102,6 +104,29 @@ yscore_clear            (tSCORE_TABLE *a_table, char r_terse [LEN_FULL], char r_
    return 0;
 }
 
-char ySCORE_clear            (void) { return yscore_clear (mySCORE.m_table , mySCORE.o_terse, mySCORE.o_score, mySCORE.o_full, mySCORE.o_report, mySCORE.o_poly); }
+char ySCORE_clear            (void) { return yscore_clear (mySCORE.m_table, &(mySCORE.m_max), mySCORE.o_terse, mySCORE.o_score, mySCORE.o_full, mySCORE.o_report, mySCORE.o_poly); }
+
+char
+yscore_data      (short n, char r_label [LEN_TERSE], char *r_default, char *r_sample, char r_print [LEN_TERSE], char r_desc [LEN_DESC], char r_valid [LEN_LABEL], char r_legend [LEN_FULL])
+{
+   char        rce         =  -10;
+   if (r_label   != NULL)   strcpy (r_label   , "");
+   if (r_default != NULL)   *r_default = '?';
+   if (r_sample  != NULL)   *r_sample  = '?';
+   if (r_print   != NULL)   strcpy (r_print   , "");
+   if (r_desc    != NULL)   strcpy (r_desc    , "");
+   if (r_valid   != NULL)   strcpy (r_valid   , "");
+   if (r_legend  != NULL)   strcpy (r_legend  , "");
+   --rce;  if (n <  0)             return rce;
+   --rce;  if (n > mySCORE.m_max)  return rce;
+   if (r_label   != NULL)   strlcpy (r_label   , (mySCORE.m_table) [n].s_label   , LEN_TERSE);
+   if (r_default != NULL)   *r_default = (mySCORE.m_table) [n].s_default;
+   if (r_sample  != NULL)   *r_sample  = (mySCORE.m_table) [n].s_sample;
+   if (r_print   != NULL)   strlcpy (r_print   , (mySCORE.m_table) [n].s_print   , LEN_TERSE);
+   if (r_desc    != NULL)   strlcpy (r_desc    , (mySCORE.m_table) [n].s_desc    , LEN_DESC);
+   if (r_valid   != NULL)   strlcpy (r_valid   , (mySCORE.m_table) [n].s_valid   , LEN_LABEL);
+   if (r_legend  != NULL)   strlcpy (r_legend  , (mySCORE.m_table) [n].s_legend  , LEN_FULL);
+   return 0;
+}
 
 

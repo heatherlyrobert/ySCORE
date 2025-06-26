@@ -50,7 +50,7 @@ yscore_pos__next        (short n, char a_sample, short *b_tpos, short *b_spos, s
 }
 
 char
-yscore_pos              (tSCORE_TABLE *a_table, char a_label [LEN_TERSE], short *r_tpos, short *r_spos, short *r_rpos, short *r_ppos)
+yscore_pos              (tSCORE_TABLE *a_table, short a_max, char a_label [LEN_TERSE], short *r_index, short *r_tpos, short *r_spos, short *r_rpos, short *r_ppos)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -61,13 +61,15 @@ yscore_pos              (tSCORE_TABLE *a_table, char a_label [LEN_TERSE], short 
    short       r           =    0;
    short       p           =    0;
    char        x_good      =  '-';
+   char        x_max       = LEN_FULL;
    /*---(header)-------------------------*/
    DEBUG_YENV   yLOG_enter   (__FUNCTION__);
    /*---(default)------------------------*/
-   if (r_tpos != NULL)  *r_tpos = -1;
-   if (r_spos != NULL)  *r_spos = -1;
-   if (r_rpos != NULL)  *r_rpos = -1;
-   if (r_ppos != NULL)  *r_ppos = -1;
+   if (r_index != NULL)  *r_index = -1;
+   if (r_tpos  != NULL)  *r_tpos  = -1;
+   if (r_spos  != NULL)  *r_spos  = -1;
+   if (r_rpos  != NULL)  *r_rpos  = -1;
+   if (r_ppos  != NULL)  *r_ppos  = -1;
    /*---(defense)------------------------*/
    DEBUG_YENV   yLOG_point   ("a_table"   , a_table);
    --rce;  if (a_table == NULL) {
@@ -88,9 +90,12 @@ yscore_pos              (tSCORE_TABLE *a_table, char a_label [LEN_TERSE], short 
       return rce;
    }
    /*---(initialize)---------------------*/
+   if      (a_max >  0)  x_max = a_max;
+   else if (a_max == 0)  x_max = mySCORE.m_max;
+   else                  x_max = LEN_FULL;
    rc = yscore_pos__next (-1, -1, &t, &s, &r, &p);
    /*---(position)-----------------------*/
-   --rce;  for (i = 0; i < LEN_FULL; ++i) {
+   --rce;  for (i = 0; i < x_max; ++i) {
       /*---(test for end)----------------*/
       if (strncmp (a_table [i].s_label, "end-", 4) == 0)  break;
       /*---(drop-out)--------------------*/
@@ -105,6 +110,7 @@ yscore_pos              (tSCORE_TABLE *a_table, char a_label [LEN_TERSE], short 
       /*---(done)------------------------*/
    }
    /*---(check for trouble)--------------*/
+   DEBUG_YENV   yLOG_value   ("i"         , i);
    DEBUG_YENV   yLOG_value   ("s"         , s);
    DEBUG_YENV   yLOG_value   ("t"         , t);
    DEBUG_YENV   yLOG_value   ("r"         , r);
@@ -114,10 +120,11 @@ yscore_pos              (tSCORE_TABLE *a_table, char a_label [LEN_TERSE], short 
       return rce;
    }
    /*---(default)------------------------*/
-   if (r_tpos != NULL)  *r_tpos = t;
-   if (r_spos != NULL)  *r_spos = s;
-   if (r_rpos != NULL)  *r_rpos = r;
-   if (r_ppos != NULL)  *r_ppos = p;
+   if (r_index != NULL)  *r_index = i;
+   if (r_tpos  != NULL)  *r_tpos  = t;
+   if (r_spos  != NULL)  *r_spos  = s;
+   if (r_rpos  != NULL)  *r_rpos  = r;
+   if (r_ppos  != NULL)  *r_ppos  = p;
    /*---(complete)-----------------------*/
    DEBUG_YENV    yLOG_exit    (__FUNCTION__);
    return 1;
