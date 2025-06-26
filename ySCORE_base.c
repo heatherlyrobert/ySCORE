@@ -4,7 +4,8 @@
 
 
 
-char  g_print   [LEN_RECD] = "";
+tSCORE      mySCORE = { NULL, "", "", "", "", "" };
+char        g_print     [LEN_RECD]  = "";
 
 
 
@@ -31,197 +32,20 @@ ySCORE_version          (void)
    snprintf (s_version, LEN_HUND, "%s   %s : %s", t, P_VERNUM, P_VERTXT);
    return s_version;
 }
+/*> static char         s_terse      [LEN_FULL]  = "· ·· ·· -   · ··· ·· ·· ···· -   · ··· ·· ·· -   · ··· ··· · · · -   · ··· ·· ·· -       ···· -";   <*/
+/*> static char         s_score      [LEN_FULL]  = "NMá · ·· ·· -   EXá · ··· ·· ·· ···· -   PRá · ··· ·· ·· -   FXá · ··· ··· · · · -   REá · ··· ·· ·· -   JDá     HKá ···· -";   <*/
+/*> static char         s_full       [LEN_FULL]  = "NMá c nb Nl ´   EXá r ogp jn rt ebih ´   PRá r ogp jn rt ´   FXá F yyy rcu R C U ´   REá r ogp jn rt ´   JDá Ï   HKá ebih ´";   <*/
+/*> static char         s_report     [LEN_FULL]  = " ·  · ·  · ·  -   ·  · · ·  · ·  · ·  · · · ·  -   ·  · · ·  · ·  · ·  -   ·  · · ·  · · ·  ·  ·  ·  -   ·  · · ·  · ·  · ·  -       · · · ·  -";   <*/
 
-/*
- * tables rules...
- *
- *    labels are only 1 to 9 characters, best if all caps
- *    last entry in labels is "end-list" as sentinel
- *
- *    default entries are used to create starting point
- *
- *    sample entries are used to show full version
- *       0) indicates 4 character block headers (two upper case followed by 'á' and ' ')
- *       1) indicates single character spacer (none of the other fields will be used
- *       3) indicates three character spacer
- *
- *    valid is to limit options, but i may remove as it can be fussy
- *
- *    print field is for creating headers
- *       block headers are horizontal on top line
- *       line headers are vertical 1 to 6 characters
- *
- *    description is short helper
- *
- *    long is used for legends telling the various content meanings
- *
- *    decided NOT to have valid values checked as is creates another
- *    level of thing that might fail -- scoring should not fail
- *
- *
- */
+/*> static char         s_ttitle     [LEN_FULL]  = "NAME²²²²‚   EXPECT²²²²²²²²²²²‚   CHECK²²²²²²²‚   FIXES²²²²²²²²²²²‚   RECHECK²²²²²‚   ³   HACK²‚";                                                   <* 
+ *> static char         s_stitle     [LEN_FULL]  = "NAME²²²²²²²²‚   EXPECT²²²²²²²²²²²²²²²‚   CHECK²²²²²²²²²²²‚   FIXES²²²²²²²²²²²²²²²‚   RECHECK²²²²²²²²²‚   ³²²²‚   HACK²²²²²‚";                       <* 
+ *> static char         s_rtitle     [LEN_FULL]  = " NAME²²²²²²²²²‚   EXPECT²²²²²²²²²²²²²²²²²²²²²²²‚   CHECK²²²²²²²²²²²²²²²‚   FIXES²²²²²²²²²²²²²²²²²²²²²‚   RECHECK²²²²²²²²²²²²²‚   ³   HACK²²²²²‚";   <*/
 
-const static tENV_SCORE s_audits [LEN_FULL] = {
-
-   /*===[[ NAME ]]==========================================================*/
-   { "NMá "     , ' ' ,  0  , "NAME"     , ""                                 , ""                                                                                },
-   /*===[[ REQUEST TYPE ]]==================================================*/
-   { "NCONF"    , '·' , 'c' , "conf"     , "naming²standard²applied"          , "°) illegal   -) wild      n) normal    s) standard  l) local     c) central"     }, 
-   { "NDIR"     , '·' , 'd' , "dir"      , "directory²requested"              , "°) null      £) empty     /) pathless  D) passed"                                },
-   { "NFILE"    , '·' , 'f' , "file"     , "file²name²requested"              , "°) null      £) empty     /) pathed    F) passed    -) skipped"                  },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   /*===[[ NAMING ]]========================================================*/
-   { "NFULL"    , '·' , 'n' , "full"     , "name²quality²checking"            , "°) null      /) not abs   ´) hidden    ¢) bad char  n) passed"                   },
-   { "NSTYLE"   , '·' , 'b' , "style"    , "naming²style"                     , "d) dir       f) file      b) both"                                               },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   /*===[[ STANDARDS ]]=====================================================*/
-   { "NDOTS"    , '·' , 'n' , "ndots"    , "file²name²separators"             , "·) skipped   °) none      <) too few   >) too many  n) passed"                   },
-   { "NPREFIX"  , '·' , 'p' , "prefix"   , "required²prefix"                  , "·) skipped   °) failed    u) user      p) passed"                                },
-   { "NSUFFIX"  , '·' , 's' , "suffix"   , "required²suffix"                  , "·) skipped   °) failed    s) passed"                                             },
-   { "NDESC"    , '·' , 'd' , "desc"     , "remaining²description"            , "·) skipped   °) failed    d) passed"                                             },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   /*===[[ LOCATION ]]======================================================*/
-   { "NLOC"     , '·' , 'h' , "loc"      , "file²location²type"               , "·) skipped   °) failed    r) root      h) home      e) etc       s) spool"       },
-   { "NUSE"     , '·' , 'H' , "usable"   , "file²location²usable"             , "·) skipped   °) failed    R) root      H) home      E) etc       S) spool"       },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   /*===[[ REQUEST ]]=======================================================*/
-   { "NAME"     , '-' , '´' , "ŒŒŒŒŒŒ"   , "[[²name²judgement²]]"             , "-) unknown   °) failed    ´) passed"                                             },
-   { "   "      , ' ' ,  3  , ""         , ""                                 , ""                                                                                },
-
-   /*===[[ REQUEST ]]=======================================================*/
-   { "EXá "     , ' ' ,  0  , "EXPECT"   , ""                                 , ""                                                                                },
-   /*===[[ REQUEST TYPE ]]==================================================*/
-   { "ETYPE"    , '·' , 'r' , "type"     , "expected file type"               , "d) dir   r) reg   s) sym   h) hard  c) char  b) block p) pipe  i) ipsoc ?) WTF"  },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   /*===[[ REQUEST CHARS ]]=================================================*/
-   { "EOWNER"   , '·' , 'o' , "owner"    , "expected owner"                   , "o) standard   ö) numeric    O) default    -) skipped"                            },
-   { "EGROUP"   , '·' , 'g' , "group"    , "expected group"                   , "g) standard   ò) numeric    G) default    -) skipped"                            },
-   { "EPERMS"   , '·' , 'p' , "perms"    , "expected permissions"             , "p) standard   ÷) non-std    P) default    -) skipped"                            },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   /*===[[ REQUEST DEVICE ]]================================================*/
-   { "EMAJOR"   , '·' , 'j' , "major"    , "expected owner"                   , "j) in-range   -) skipped"                                                        },
-   { "EMINOR"   , '·' , 'n' , "minor"    , "expected group"                   , "n) in-range   -) skipped"                                                        },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   /*===[[ REQUEST LINK ]]==================================================*/
-   { "ETTYPE"   , '·' , 'r' , "ttype"    , "expected link target type"        , "d) dir   r) reg   s) sym   h) hard  c) char  b) block p) pipe  i) ipsoc ?) WTF"  },
-   { "ETARGET"  , '·' , 't' , "target"   , "expected link target"             , "/) not-abs    #) bad chars  t) accepted   -) skipped"                            },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   /*===[[ REQUEST EXTENDED ]]==============================================*/
-   { "EEPOCH"   , '·' , 'e' , "epoch"    , "expected update time"             , "e) accepted   -) skipped"                                                        },
-   { "EBYTES"   , '·' , 'b' , "bytes"    , "expected size in bytes"           , "b) accepted   -) skipped"                                                        },
-   { "EINODE"   , '·' , 'i' , "inode"    , "expected inode"                   , "i) accepted   -) skipped"                                                        },
-   { "EHASH"    , '·' , 'h' , "hash"     , "expected file SHA hash"           , "h) accepted   -) skipped"                                                        },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   /*===[[ REQUEST ]]=======================================================*/
-   { "EXPECT"   , '-' , '´' , "ŒŒŒŒŒŒ"   , "judgement on request"             , "´) passed"                                                                       },
-   { "   "      , ' ' ,  3  , ""         , ""                                 , ""                                                                                },
-
-   /*===[[ PRECHECK ]]======================================================*/
-   { "PRá "     , ' ' ,  0  , "CHECK"    , ""                                 , ""                                                                                },
-   /*===[[ CHECK TYPE ]]====================================================*/
-   { "CTYPE"    , '·' , 'r' , "type"     , "checked file type"                , "same as expected type, lower case if matching, upper case if not-match"          },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   /*===[[ CHECK CHARS ]]===================================================*/
-   { "COWNER"   , '·' , 'o' , "owner"    , "checked owner"                    , "o) match      O) not-match"                                                      },
-   { "CGROUP"   , '·' , 'g' , "group"    , "checked group"                    , "g) match      G) not-match"                                                      },
-   { "CPERMS"   , '·' , 'p' , "perms"    , "checked permissions"              , "p) match      P) not-match"                                                      },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   /*===[[ CHECK DEVICE ]]==================================================*/
-   { "CMAJOR"   , '·' , 'j' , "major"    , "checked owner"                    , "j) match      J) not-match"                                                      },
-   { "CMINOR"   , '·' , 'n' , "minor"    , "checked group"                    , "n) match      N) not-match"                                                      },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   /*===[[ CHECK LINK ]]====================================================*/
-   { "CTTYPE"   , '·' , 'r' , "ttype"    , "checked link target type"         , "t) match      T) not-match"                                                      },
-   { "CTARGET"  , '·' , 't' , "target"   , "checked link target"              , "t) match      T) not-match"                                                      },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   /*===[[ CHECK JUDGE ]]===================================================*/
-   { "CHECK"    , '-' , '´' , "ŒŒŒŒŒŒ"   , "judgement on check"               , "-) skipped    ´) passed"                                                         },
-   { "   "      , ' ' ,  3  , ""         , ""                                 , ""                                                                                },
-
-   /*===[[ FIXES ]]=========================================================*/
-   { "FXá "     , ' ' ,  0  , "FIXES"    , ""                                 , ""                                                                                },
-   /*===[[ REQUEST ]]=======================================================*/
-   { "EFLAG"    , '·' , 'F' , "flag"     , "fix/forcing flag interpretation"  , "-) none allowed  f) allow fix     F) allow create  !) can even remove"           },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   /*===[[ CONFIGURATION ]]=================================================*/
-   { "CONFC"    , '·' , 'y' , "check"    , "judgement on request"             , "y) precheck    -) not-requested"                                                 },
-   { "CONFF"    , '·' , 'y' , "force"    , "judgement on request"             , "y) create, if must   !) remove, if must   -) not-requested"                      },
-   { "CONFX"    , '·' , 'y' , "fix"      , "judgement on request"             , "y) fix, if must      -) not-requested"                                           },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   /*===[[ FIX/FORCES ]]====================================================*/
-   { "FDEL"     , '·' , 'r' , "remove"   , "need forced deletion"             , "r) requires deletion   -) not needed"                                            },
-   { "FADD"     , '·' , 'c' , "create"   , "need forced creation"             , "c) requires creation   -) not needed"                                            },
-   { "FUPD"     , '·' , 'u' , "update"   , "need forced updates"              , "u) requires updates    -) not needed"                                            },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   /*===[[ ACTUAL ]]========================================================*/
-   { "REMOVE"   , '·' , 'R' , "REMOVE"   , "actual deletion"                  , "R) really removed    ?) non-existant      !) not enough force  -) not needed"    },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   { "CREATE"   , '·' , 'C' , "CREATE"   , "actual creation"                  , "C) really created    ?) already exists    !) not enough force  -) not needed"    },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   { "UPDATE"   , '·' , 'U' , "UPDATE"   , "actual updates"                   , "U) really updated    !) not enough force  -) not needed"                         },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   /*===[[ RE-CHECK JUDGE ]]================================================*/
-   { "FIXES"    , '-' , '´' , "ŒŒŒŒŒŒ"   , "judgement on fixes"               , "-) skipped    ´) passed"                                                         },
-   { "   "      , ' ' ,  3  , ""         , ""                                 , ""                                                                                },
-
-   /*===[[ RECHECK ]]=======================================================*/
-   { "REá "     , ' ' ,  0  , "RECHECK"  , ""                                 , ""                                                                                },
-   /*===[[ RE-CHECK TYPE ]]=================================================*/
-   { "RTYPE"    , '·' , 'r' , "type"     , "checked file type"                , "same as expected type, lower case if matching, upper case if not-match"          },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   /*===[[ RE-CHECK CHARS ]]================================================*/
-   { "ROWNER"   , '·' , 'o' , "owner"    , "re-checked owner"                 , "o) match      O) not-match"                                                      },
-   { "RGROUP"   , '·' , 'g' , "group"    , "re-checked group"                 , "g) match      G) not-match"                                                      },
-   { "RPERMS"   , '·' , 'p' , "perms"    , "re-checked permissions"           , "p) match      P) not-match"                                                      },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   /*===[[ RE-CHECK DEVICE ]]===============================================*/
-   { "RMAJOR"   , '·' , 'j' , "major"    , "re-checked owner"                 , "j) match      J) not-match"                                                      },
-   { "RMINOR"   , '·' , 'n' , "minor"    , "re-checked group"                 , "n) match      N) not-match"                                                      },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   /*===[[ RE-CHECK LINK ]]=================================================*/
-   { "RTTYPE"   , '·' , 'r' , "ttype"    , "re-checked link target type"      , "t) match      T) not-match"                                                      },
-   { "RTARGET"  , '·' , 't' , "target"   , "re-checked link target"           , "t) match      T) not-match"                                                      },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   /*===[[ RE-CHECK JUDGE ]]================================================*/
-   { "RECHECK"  , '-' , '´' , "ŒŒŒŒŒŒ"   , "judgement on re-check"            , "´) passed"                                                                       },
-   { "   "      , ' ' ,  3  , ""         , ""                                 , ""                                                                                },
-
-   /*===[[ FINAL ]]=========================================================*/
-   { "JDá "     , ' ' ,  0  , "³"        , ""                                 , ""                                                                                },
-   /*===[[ FINAL JUDGE ]]===================================================*/
-   { "FINAL"    , ' ' , 'Ï' , "FINAL"    , "final judgement"                  , "Ï) passed"                                                                       },
-   { "   "      , ' ' ,  3  , ""         , ""                                 , ""                                                                                },
-
-   /*===[[ HACKED ]]========================================================*/
-   { "HKá "     , ' ' ,  0  , "HACK"     , ""                                 , ""                                                                                },
-   /*===[[ HACKING CHECK ]]=================================================*/
-   { "AEPOCH"   , '·' , 'e' , "epoch"    , "check update time"                , "e) matches    E) not-match"                                                      },
-   { "ABYTES"   , '·' , 'b' , "bytes"    , "check size in bytes"              , "b) matches    B) not-match"                                                      },
-   { "AINODE"   , '·' , 'i' , "inode"    , "check inode"                      , "i) matches    I) not-match"                                                      },
-   { "AHASH"    , '·' , 'h' , "hash"     , "check file SHA hash"              , "h) matches    H) not-match"                                                      },
-   { " "        , ' ' ,  1  , ""         , ""                                 , ""                                                                                },
-   /*===[[ HACKING FINAL ]]=================================================*/
-   { "HACKED"   , '-' , '´' , "ŒŒŒŒŒŒ"   , "final hacking judgement"          , "-) skipped    ´) passed"                                                         },
-
-   /*===[[ END-OF-LIST ]]===================================================*/
-   { "end-list" , '·' , '·' , ""         , "end-of-entries"                   , ""                                                                                },
-
-   /*===[[ DONE ]]==========================================================*/
-};
-static char         s_terse      [LEN_FULL]  = "· ·· ·· -   · ··· ·· ·· ···· -   · ··· ·· ·· -   · ··· ··· · · · -   · ··· ·· ·· -       ···· -";
-static char         s_score      [LEN_FULL]  = "NMá · ·· ·· -   EXá · ··· ·· ·· ···· -   PRá · ··· ·· ·· -   FXá · ··· ··· · · · -   REá · ··· ·· ·· -   JDá     HKá ···· -";
-static char         s_full       [LEN_FULL]  = "NMá c nb Nl ´   EXá r ogp jn rt ebih ´   PRá r ogp jn rt ´   FXá F yyy rcu R C U ´   REá r ogp jn rt ´   JDá Ï   HKá ebih ´";
-static char         s_report     [LEN_FULL]  = " ·  · ·  · ·  -   ·  · · ·  · ·  · ·  · · · ·  -   ·  · · ·  · ·  · ·  -   ·  · · ·  · · ·  ·  ·  ·  -   ·  · · ·  · ·  · ·  -       · · · ·  -";
-
-static char         s_ttitle     [LEN_FULL]  = "NAME²²²²‚   EXPECT²²²²²²²²²²²‚   CHECK²²²²²²²‚   FIXES²²²²²²²²²²²‚   RECHECK²²²²²‚   ³   HACK²‚";
-static char         s_stitle     [LEN_FULL]  = "NAME²²²²²²²²‚   EXPECT²²²²²²²²²²²²²²²‚   CHECK²²²²²²²²²²²‚   FIXES²²²²²²²²²²²²²²²‚   RECHECK²²²²²²²²²‚   ³²²²‚   HACK²²²²²‚";
-static char         s_rtitle     [LEN_FULL]  = " NAME²²²²²²²²²‚   EXPECT²²²²²²²²²²²²²²²²²²²²²²²‚   CHECK²²²²²²²²²²²²²²²‚   FIXES²²²²²²²²²²²²²²²²²²²²²‚   RECHECK²²²²²²²²²²²²²‚   ³   HACK²²²²²‚";
-
-static tENV_SCORE  *s_TABLE   = NULL;
-static char         s_TERSE      [LEN_FULL]  = "";
-static char         s_SCORE      [LEN_FULL]  = "";
-static char         s_FULL       [LEN_FULL]  = "";
-static char         s_REPORT     [LEN_FULL]  = "";
+/*> static tSCORE_TABLE  *mySCORE.m_table   = NULL;                                           <*/
+/*> static char         s_TERSE      [LEN_FULL]  = "";                                <*/
+/*> static char         s_SCORE      [LEN_FULL]  = "";                                <*/
+/*> static char         s_FULL       [LEN_FULL]  = "";                                <*/
+/*> static char         s_REPORT     [LEN_FULL]  = "";                                <*/
 
 
 
@@ -300,245 +124,6 @@ static char         s_REPORT     [LEN_FULL]  = "";
 /*====================------------------------------------====================*/
 static void      o___HELPERS____________o (void) {;}
 
-char* yenv_score_terse  (void)  { return s_terse; }
-char* yENV_score_terse  (void)  { return s_TERSE; }
-
-char* yenv_score        (void)  { return s_score; }
-char* yENV_score        (void)  { return s_SCORE; }
-
-char* yenv_score_full   (void)  { return s_full; }
-char* yENV_score_full   (void)  { return s_FULL; }
-
-char* yenv_score_report (void)  { return s_report; }
-char* yENV_score_report (void)  { return s_REPORT; }
-
-
-
-
-/*====================------------------------------------====================*/
-/*===----                        program level                         ----===*/
-/*====================------------------------------------====================*/
-static void      o___PROGRAM_______o (void) {;};
-
-char
-yENV_score_init         (tENV_SCORE *a_table)
-{
-   s_TABLE = a_table;
-   yENV_score_clear ();
-   return 0;
-}
-
-char
-yenv_score__clear       (tENV_SCORE *a_table, char r_terse [LEN_FULL], char r_score [LEN_FULL], char r_full [LEN_FULL], char r_report [LEN_FULL])
-{
-   /*---(locals)-----------+-----+-----+-*/
-   char        rce         =  -10;
-   int         i           =    0;
-   char        s           [LEN_SHORT] = "";
-   char        f           [LEN_SHORT] = "";
-   char        t           [LEN_SHORT] = "";
-   char        r           [LEN_SHORT] = "";
-   char        x_terse     [LEN_FULL]  = "";
-   char        x_score     [LEN_FULL]  = "";
-   char        x_full      [LEN_FULL]  = "";
-   char        x_report    [LEN_FULL]  = "";
-   /*---(header)-------------------------*/
-   DEBUG_YENV   yLOG_senter  (__FUNCTION__);
-   /*---(defense)------------------------*/
-   DEBUG_YENV   yLOG_spoint  (a_table);
-   --rce;  if (a_table == NULL) {
-      yURG_err ('w', "scoring clear called without scoring table");
-      DEBUG_YENV   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(create)-------------------------*/
-   for (i = 0; i < LEN_FULL; ++i) {
-      /*---(test for end)----------------*/
-      if (strncmp (a_table [i].s_label, "end-", 4) == 0)  break;
-      switch (a_table [i].s_sample) {
-      case  0  :
-         strlcpy (s     , a_table [i].s_label , LEN_SHORT);
-         strlcpy (f     , a_table [i].s_label , LEN_SHORT);
-         strlcpy (t     , ""                  , LEN_SHORT);
-         strlcpy (r     , ""                  , LEN_SHORT);
-         break;
-      case  1  :
-         strlcpy (s     , " "   , LEN_SHORT);
-         strlcpy (f     , " "   , LEN_SHORT);
-         strlcpy (t     , " "   , LEN_SHORT);
-         strlcpy (r     , " "   , LEN_SHORT);
-         break;
-      case  3  :
-         strlcpy (s     , "   " , LEN_SHORT);
-         strlcpy (f     , "   " , LEN_SHORT);
-         strlcpy (t     , "   " , LEN_SHORT);
-         strlcpy (r     , "  "  , LEN_SHORT);
-         break;
-      default  :
-         sprintf  (s, "%c" , a_table [i].s_default);
-         sprintf  (f, "%c" , a_table [i].s_sample);
-         sprintf  (t, "%c" , a_table [i].s_default);
-         sprintf  (r, " %c", a_table [i].s_default);
-      }
-      strlcat (x_full  , f  , LEN_FULL);
-      strlcat (x_score , s  , LEN_FULL);
-      strlcat (x_terse , t  , LEN_FULL);
-      strlcat (x_report, r  , LEN_FULL);
-   }
-   /*---(save-back)----------------------*/
-   if (r_terse  != NULL)  strlcpy (r_terse , x_terse , LEN_FULL);
-   if (r_score  != NULL)  strlcpy (r_score , x_score , LEN_FULL);
-   if (r_full   != NULL)  strlcpy (r_full  , x_full  , LEN_FULL);
-   if (r_report != NULL)  strlcpy (r_report, x_report, LEN_FULL);
-   /*---(complete)-----------------------*/
-   DEBUG_YENV   yLOG_sexit   (__FUNCTION__);
-   return 0;
-}
-
-char yenv_score_clear        (void) { return yenv_score__clear (s_audits, s_terse, s_score, s_full, s_report); }
-char yENV_score_clear        (void) { return yenv_score__clear (s_TABLE , s_TERSE, s_SCORE, s_FULL, s_REPORT); }
-
-
-
-/*====================------------------------------------====================*/
-/*===----                       positioning                            ----===*/
-/*====================------------------------------------====================*/
-static void      o___POSITION______o (void) {;};
-
-char
-yenv_score__inc         (char a_sample, char *b_tpos, short *b_spos, short *b_rpos)
-{
-   /*---(locals)-----------+-----+-----+-*/
-   char        t           =    0;
-   char        s           =    0;
-   char        r           =    0;
-   /*---(set increment)------------------*/
-   switch (a_sample) {
-   case  0  :   t = 0;   s = 4;   r = 0;   break;
-   case  1  :   t = 1;   s = 1;   r = 1;   break;
-   case  3  :   t = 3;   s = 3;   r = 2;   break;
-   default  :   t = 1;   s = 1;   r = 2;   break;
-   }
-   /*---(save-back)----------------------*/
-   if (b_tpos != NULL)   *b_tpos += t;
-   if (b_spos != NULL)   *b_spos += s;
-   if (b_rpos != NULL)   *b_rpos += r;
-   /*---(complete)-----------------------*/
-   return 0;
-}
-
-char
-yenv_score__accum       (tENV_SCORE *a_table, short n, short *b_tpos, short *b_spos, short *b_rpos)
-{
-   /*---(locals)-----------+-----+-----+-*/
-   char        rce         =  -10;
-   char        rc          =    0;
-   short       t           =    0;
-   short       s           =    0;
-   short       r           =    0;
-   /*---(defense)------------------------*/
-   --rce;  if (a_table == NULL)                  return rce;
-   /*---(starting point)-----------------*/
-   if (b_tpos != NULL)   t  = *b_tpos;
-   if (b_spos != NULL)   s  = *b_spos;
-   if (b_rpos != NULL)   r  = *b_rpos;
-   /*---(specific adjustments)-----------*/
-   if (n == 0)  r += 1;
-   /*---(set increment)------------------*/
-   rc = yenv_score__inc (a_table [n].s_sample, &t, &s, &r);
-   --rce;  if (rc < 0)             return rce;
-   /*---(checks)-------------------------*/
-   --rce;  if (t <  0)             return rce;
-   --rce;  if (t >= LEN_FULL - 1)  return rce;
-   --rce;  if (s <  0)             return rce;
-   --rce;  if (s >= LEN_FULL - 1)  return rce;
-   --rce;  if (r <  0)             return rce;
-   --rce;  if (r >= LEN_FULL - 1)  return rce;
-   /*---(save-back)----------------------*/
-   if (b_tpos != NULL)   *b_tpos = t;
-   if (b_spos != NULL)   *b_spos = s;
-   if (b_rpos != NULL)   *b_rpos = r;
-   /*---(complete)-----------------------*/
-   return 0;
-}
-
-char
-yenv_score_accum        (tENV_SCORE *a_table, char a_type, short n, short *r_pos)
-{
-   switch (a_type) {
-   case 't' :  return yenv_score__accum (a_table, n, r_pos, NULL , NULL );  break;
-   case 's' :  return yenv_score__accum (a_table, n, NULL , r_pos, NULL );  break;
-   case 'r' :  return yenv_score__accum (a_table, n, NULL , NULL , r_pos);  break;
-   default  :  return -99;
-   }
-}
-
-char
-yenv_score__pos         (tENV_SCORE *a_table, char a_label [LEN_TERSE], short *r_tpos, short *r_spos, short *r_rpos)
-{
-   /*---(locals)-----------+-----+-----+-*/
-   char        rce         =  -10;
-   char        rc          =    0;
-   int         i           =    0;
-   short       t           =    0;
-   short       s           =    0;
-   short       r           =    0;
-   char        x_good      =  '-';
-   /*---(header)-------------------------*/
-   DEBUG_YENV   yLOG_enter   (__FUNCTION__);
-   /*---(defense)------------------------*/
-   DEBUG_YENV   yLOG_point   ("a_table"   , a_table);
-   --rce;  if (a_table == NULL) {
-      yURG_err ('w', "scoring pos called without scoring table");
-      DEBUG_YENV   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(default)------------------------*/
-   if (r_tpos != NULL)  *r_tpos = -1;
-   if (r_spos != NULL)  *r_spos = -1;
-   if (r_rpos != NULL)  *r_rpos = -1;
-   /*---(defense)------------------------*/
-   DEBUG_YENV   yLOG_point   ("a_label"   , a_label);
-   --rce;  if (a_label == NULL || a_label [0] == '\0') {
-      DEBUG_YENV    yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   DEBUG_YENV   yLOG_info    ("a_label"   , a_label);
-   /*---(position)-----------------------*/
-   for (i = 0; i < LEN_FULL; ++i) {
-      /*---(test for end)----------------*/
-      if (strncmp (a_table [i].s_label, "end-", 4) == 0)  break;
-      /*---(drop-out)--------------------*/
-      if (strcmp (a_table [i].s_label, a_label) == 0) {
-         DEBUG_YENV   yLOG_value   ("FOUND"     , i);
-         x_good = 'y';
-         break;
-      }
-      /*---(accumulate)------------------*/
-      rc = yenv_score__inc (a_table [i].s_sample, &t, &s, &r);
-      --rce;  if (rc < 0)             return rce;
-   }
-   ++r;
-   /*---(check for trouble)--------------*/
-   DEBUG_YENV   yLOG_value   ("s"         , s);
-   DEBUG_YENV   yLOG_value   ("t"         , t);
-   DEBUG_YENV   yLOG_value   ("r"         , r);
-   --rce;  if (x_good != 'y') {
-      DEBUG_YENV    yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(default)------------------------*/
-   if (r_tpos != NULL)  *r_tpos = t;
-   if (r_spos != NULL)  *r_spos = s;
-   if (r_rpos != NULL)  *r_rpos = r;
-   /*---(complete)-----------------------*/
-   DEBUG_YENV    yLOG_exit    (__FUNCTION__);
-   return 0;
-}
-
-char yenv_score_pos    (char a_label [LEN_TERSE], short *r_norm, short *r_terse, short *r_report)  { return yenv_score__pos (s_audits, a_label, r_norm, r_terse, r_report); }
-char yENV_score_pos    (char a_label [LEN_TERSE], short *r_norm, short *r_terse, short *r_report)  { return yenv_score__pos (s_TABLE , a_label, r_norm, r_terse, r_report); }
-
 
 
 /*====================------------------------------------====================*/
@@ -547,14 +132,15 @@ char yENV_score_pos    (char a_label [LEN_TERSE], short *r_norm, short *r_terse,
 static void      o___MARKING_______o (void) {;};
 
 char
-yenv_score__mark         (tENV_SCORE *a_table, char a_label [LEN_TERSE], uchar a_mark, char b_terse [LEN_FULL], char b_score [LEN_FULL], char b_report [LEN_FULL])
+yenv_score__mark         (tSCORE_TABLE *a_table, char a_label [LEN_TERSE], uchar a_mark, char b_terse [LEN_FULL], char b_score [LEN_FULL], char b_report [LEN_FULL])
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
    short       t           =   -1;
    short       s           =   -1;
-   short       r           =   -1; /*---(header)-------------------------*/
+   short       r           =   -1;
+   /*---(header)-------------------------*/
    DEBUG_YENV   yLOG_enter   (__FUNCTION__);
    /*---(defense)------------------------*/
    DEBUG_YENV   yLOG_point   ("a_table"   , a_table);
@@ -571,7 +157,7 @@ yenv_score__mark         (tENV_SCORE *a_table, char a_label [LEN_TERSE], uchar a
    }
    DEBUG_YENV   yLOG_char    ("a_mark"    , a_mark);
    /*---(position)-----------------------*/
-   rc = yenv_score__pos (a_table, a_label, &t, &s, &r);
+   rc = yscore_pos (a_table, a_label, &t, &s, &r, NULL);
    DEBUG_YENV   yLOG_value   ("pos"       , rc);
    --rce;  if (rc < 0) {
       yURG_err ('w', "scoring mark å%sæ, label does not exist in scoring table", a_label);
@@ -601,11 +187,10 @@ yenv_score__mark         (tENV_SCORE *a_table, char a_label [LEN_TERSE], uchar a
    return 0;
 }
 
-char yenv_score_mark    (char a_label [LEN_TERSE], uchar a_mark)  { return yenv_score__mark  (s_audits, a_label, a_mark, s_terse, s_score, s_report); }
-char yENV_score_mark    (char a_label [LEN_TERSE], uchar a_mark)  { return yenv_score__mark  (s_TABLE , a_label, a_mark, s_TERSE, s_SCORE, s_REPORT); }
+char yENV_score_mark    (char a_label [LEN_TERSE], uchar a_mark)  { return yenv_score__mark  (mySCORE.m_table , a_label, a_mark, mySCORE.o_terse, mySCORE.o_score, mySCORE.o_report); }
 
 char
-yenv_score__value       (tENV_SCORE *a_table, char a_label [LEN_TERSE], char a_score [LEN_FULL])
+yenv_score__value       (tSCORE_TABLE *a_table, char a_label [LEN_TERSE], char a_score [LEN_FULL])
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -627,7 +212,7 @@ yenv_score__value       (tENV_SCORE *a_table, char a_label [LEN_TERSE], char a_s
       return rce;
    }
    /*---(position)-----------------------*/
-   rc = yenv_score__pos (a_table, a_label, NULL, &s, NULL);
+   rc = yscore_pos (a_table, a_label, NULL, &s, NULL, NULL);
    DEBUG_YENV   yLOG_value   ("pos"       , rc);
    --rce;  if (rc < 0) {
       yURG_err ('w', "scoring value å%sæ, label does not exist in scoring table", a_label);
@@ -643,8 +228,7 @@ yenv_score__value       (tENV_SCORE *a_table, char a_label [LEN_TERSE], char a_s
    return x_value;
 }
 
-char yenv_score_value  (char a_label [LEN_TERSE])  { return yenv_score__value (s_audits, a_label, s_score); }
-char yENV_score_value  (char a_label [LEN_TERSE])  { return yenv_score__value (s_TABLE , a_label, s_SCORE); }
+char yENV_score_value  (char a_label [LEN_TERSE])  { return yenv_score__value (mySCORE.m_table , a_label, mySCORE.o_score); }
 
 
 
@@ -654,7 +238,7 @@ char yENV_score_value  (char a_label [LEN_TERSE])  { return yenv_score__value (s
 static void      o___REPORT________o (void) {;};
 
 char*
-yenv_score__header      (tENV_SCORE *a_table, char n)
+yenv_score__header      (tSCORE_TABLE *a_table, char n)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -704,11 +288,10 @@ yenv_score__header      (tENV_SCORE *a_table, char n)
    return g_print;
 }
 
-char* yenv_score_header  (char n)   { return yenv_score__header    (s_audits, n); }
-char* yENV_score_header  (char n)   { return yenv_score__header    (s_TABLE , n); }
+char* yENV_score_header  (char n)   { return yenv_score__header    (mySCORE.m_table , n); }
 
 char*
-yenv_score__title       (tENV_SCORE *a_table, char a_type)
+yenv_score__title       (tSCORE_TABLE *a_table, char a_type)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -731,9 +314,9 @@ yenv_score__title       (tENV_SCORE *a_table, char a_type)
    /*---(make base)----------------------*/
    DEBUG_YENV   yLOG_char    ("a_type"    , a_type);
    --rce;  switch (a_type) {
-   case 't'  :  if (a_table == s_audits)   x_max = strlen (s_terse ); else x_max = strlen (s_TERSE );  break;
-   case 's'  :  if (a_table == s_audits)   x_max = strlen (s_score ); else x_max = strlen (s_SCORE );  break;
-   case 'r'  :  if (a_table == s_audits)   x_max = strlen (s_report); else x_max = strlen (s_REPORT);  break;
+   case 't'  :  x_max = strlen (mySCORE.o_terse ); break;
+   case 's'  :  x_max = strlen (mySCORE.o_score ); break;
+   case 'r'  :  x_max = strlen (mySCORE.o_report); break;
    default   :
                    DEBUG_YENV   yLOG_exitr   (__FUNCTION__, rce);
                    return "(bad type)";
@@ -749,7 +332,7 @@ yenv_score__title       (tENV_SCORE *a_table, char a_type)
          break;
       }
       /*---(accumulate)------------------*/
-      rc = yenv_score_accum (a_table, a_type, i, &x_pos);
+      rc = yscore_pos_accum (a_table, a_type, i, &x_pos);
       DEBUG_YENV   yLOG_complex ("accum"     , "%3d) %3d, inc %3d, pos %3d", i, a_table [i].s_sample, rc, x_pos);
       /*---(print)----------------------*/
       if (a_table [i].s_sample == 0) {
@@ -785,8 +368,7 @@ yenv_score__title       (tENV_SCORE *a_table, char a_type)
    return g_print;
 }
 
-char* yenv_score_title  (char a_type) { return yenv_score__title (s_audits, a_type); }
-char* yENV_score_title  (char a_type) { return yenv_score__title (s_TABLE , a_type); }
+char* yENV_score_title  (char a_type) { return yenv_score__title (mySCORE.m_table , a_type); }
 
 
 
@@ -796,7 +378,7 @@ char* yENV_score_title  (char a_type) { return yenv_score__title (s_TABLE , a_ty
 static void      o___MASKING_______o (void) {;};
 
 char
-yenv_score__mask        (tENV_SCORE *a_table, char a_beg [LEN_TERSE], char a_end [LEN_TERSE], char b_terse [LEN_FULL], char b_score [LEN_FULL], char b_report [LEN_FULL])
+yenv_score__mask        (tSCORE_TABLE *a_table, char a_beg [LEN_TERSE], char a_end [LEN_TERSE], char b_terse [LEN_FULL], char b_score [LEN_FULL], char b_report [LEN_FULL])
 {
    char         rce        =  -10;
    char         rc         =    0;
@@ -808,12 +390,12 @@ yenv_score__mask        (tENV_SCORE *a_table, char a_beg [LEN_TERSE], char a_end
       yURG_err ('w', "scoring mask called without scoring table");
       return rce;
    }
-   rc = yenv_score__pos (a_table, a_beg, &bt, &bs, &br);
+   rc = yscore_pos (a_table, a_beg, &bt, &bs, &br, NULL);
    --rce;  if (rc < 0 || bs < 0) {
       yURG_err ('w', "scoring mask å%sæ, begin label does not exist in scoring table", a_beg);
       return rce;
    }
-   rc = yenv_score__pos (a_table, a_end, &et, &es, &er);
+   rc = yscore_pos (a_table, a_end, &et, &es, &er, NULL);
    --rce;  if (rc < 0 || es < 0) {
       yURG_err ('w', "scoring mask å%sæ, ending label does not exist in scoring table", a_end);
       return rce;
@@ -824,11 +406,10 @@ yenv_score__mask        (tENV_SCORE *a_table, char a_beg [LEN_TERSE], char a_end
    return 0;
 }
 
-char yenv_score_mask         (char a_beg [LEN_TERSE], char a_end [LEN_TERSE])  { yenv_score__mask (s_audits, a_beg, a_end, s_terse, s_score, s_report); }
-char yENV_score_mask         (char a_beg [LEN_TERSE], char a_end [LEN_TERSE])  { yenv_score__mask (s_TABLE , a_beg, a_end, s_TERSE, s_SCORE, s_REPORT); }
+char yENV_score_mask         (char a_beg [LEN_TERSE], char a_end [LEN_TERSE])  { yenv_score__mask (mySCORE.m_table , a_beg, a_end, mySCORE.o_terse, mySCORE.o_score, mySCORE.o_report); }
 
-char yenv_score_nocheck      (void) { return yenv_score_mask ("PRá "      , "FIXES"     ); }
-char yenv_score_nohacked     (void) { return yenv_score_mask ("HKá "      , "HACKED"    ); }
+char yenv_score_nocheck      (void) { return yENV_score_mask ("PRá "      , "FIXES"     ); }
+char yenv_score_nohacked     (void) { return yENV_score_mask ("HKá "      , "HACKED"    ); }
 
 
 
@@ -1020,7 +601,7 @@ yenv_score__aline       (short n, char a_label [LEN_TERSE], char a_default, char
 }
 
 char
-yenv_score__adup        (tENV_SCORE *a_table, char n, char a_label [LEN_TERSE])
+yenv_score__adup        (tSCORE_TABLE *a_table, char n, char a_label [LEN_TERSE])
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -1046,7 +627,7 @@ yenv_score__adup        (tENV_SCORE *a_table, char n, char a_label [LEN_TERSE])
 }
 
 char
-yenv_score__audit       (tENV_SCORE *a_table)
+yenv_score__audit       (tSCORE_TABLE *a_table)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -1127,8 +708,7 @@ yenv_score__audit       (tENV_SCORE *a_table)
    return rc_final;
 }
 
-char yenv_score_audit   (void)  { return yenv_score__audit (s_audits); }
-char yENV_score_audit   (void)  { return yenv_score__audit (s_TABLE); }
+char yENV_score_audit   (void)  { return yenv_score__audit (mySCORE.m_table); }
 
 
 
@@ -1138,7 +718,7 @@ char yENV_score_audit   (void)  { return yenv_score__audit (s_TABLE); }
 static void      o___LEGEND________o (void) {;};
 
 char*
-yenv_score__legend      (tENV_SCORE *a_table, char a_line, char a_label [LEN_TERSE], char a_terse [LEN_FULL])
+yenv_score__legend      (tSCORE_TABLE *a_table, char a_line, char a_label [LEN_TERSE], char a_terse [LEN_FULL])
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -1214,7 +794,7 @@ yenv_score__legend      (tENV_SCORE *a_table, char a_line, char a_label [LEN_TER
       return "(count < 1)";
    }
    /*---(start)--------------------------*/
-   rc = yenv_score__pos (a_table, a_table [x_beg].s_label, &x_off, NULL, NULL);
+   rc = yscore_pos (a_table, a_table [x_beg].s_label, &x_off, NULL, NULL, NULL);
    DEBUG_YENV   yLOG_value   ("pos"       , rc);
    --rce;  if (rc < 0) {
       DEBUG_YENV   yLOG_exitr   (__FUNCTION__, rce);
@@ -1295,7 +875,7 @@ yenv_score__legend      (tENV_SCORE *a_table, char a_line, char a_label [LEN_TER
    return g_print;
 }
 
-char* yenv_score_legend (char a_line, char a_label [LEN_TERSE])  { return yenv_score__legend (s_audits, a_line, a_label, s_terse); }
+char* yenv_score_legend (char a_line, char a_label [LEN_TERSE])  { return yenv_score__legend (mySCORE.m_table, a_line, a_label, mySCORE.o_terse); }
 
 
 

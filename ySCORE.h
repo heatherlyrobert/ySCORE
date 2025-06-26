@@ -1,6 +1,6 @@
 /*===[[ HEADER GUARD ]]=======================================================*/
-#ifndef YENV_HGUARD
-#define YENV_HGUARD loaded
+#ifndef YSCORE_HGUARD
+#define YSCORE_HGUARD loaded
 
 
 
@@ -9,38 +9,48 @@
 
 
 
-struct cENV_SCORE {
+struct cSCORE_TABLE {
    char        s_label     [LEN_TERSE];
    char        s_default;
    char        s_sample;  
    char        s_print     [LEN_TERSE];  
    char        s_desc      [LEN_DESC];
+   char        s_valid     [LEN_LABEL];
    char        s_legend    [LEN_FULL];
 };
-typedef   struct   cENV_SCORE   tENV_SCORE;
+typedef   struct   cSCORE_TABLE   tSCORE_TABLE;
 
 
 
 /*===[[ yENV_base.c ]]========================================================*/
 /*········· ´······················ ´·········································*/
-char*       ySCORE_version          (void);
 /*---(done)-----------------*/
 
 
 
 
 
-/*===[[ yENV_score.c ]]=======================================================*/
+/*===[[ yENV_base.c ]]========================================================*/
 /*········· ´······················ ´·········································*/
-char        yENV_score_init         (tENV_SCORE *a_table);
-char        yENV_score_clear        (void);
+/*---(program)------------------------*/
+char*       ySCORE_version          (void);
+char        ySCORE_init             (tSCORE_TABLE *a_table);
+char        ySCORE_clear            (void);
 
-char*       yENV_score_terse        (void);
-char*       yENV_score              (void);
-char*       yENV_score_full         (void);
-char*       yENV_score_report       (void);
 
-char        yENV_score_pos          (char a_label [LEN_TERSE], short *r_norm, short *r_terse, short *r_report);
+
+/*===[[ yENV_rptg.c ]]========================================================*/
+/*---(output)-------------------------*/
+char*       ySCORE_terse            (void);
+char*       ySCORE_score            (void);
+char*       ySCORE_full             (void);
+char*       ySCORE_report           (void);
+char*       ySCORE_poly             (void);
+
+
+
+
+
 char        yENV_score_mark         (char a_label [LEN_TERSE], uchar a_mark);
 char        yENV_score_value        (char a_label [LEN_TERSE]);
 
@@ -50,6 +60,8 @@ char*       yENV_score_header       (char n);
 char        yENV_score_mask         (char a_beg [LEN_TERSE], char a_end [LEN_TERSE]);
 
 char        yENV_score_audit        (void);
+
+
 
 
 #endif
