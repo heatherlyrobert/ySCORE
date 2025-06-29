@@ -31,7 +31,7 @@ yscore_clear            (tSCORE_TABLE *a_table, short *r_max, char r_terse [LEN_
    char        x_poly      [LEN_FULL]  = "";
    char        x_lead      =  'y';
    /*---(header)-------------------------*/
-   DEBUG_YENV   yLOG_senter  (__FUNCTION__);
+   DEBUG_YSCORE   yLOG_senter  (__FUNCTION__);
    /*---(default)------------------------*/
    if (r_max    != NULL)  *r_max  = -1;
    if (r_terse  != NULL)  strlcpy (r_terse , "", LEN_FULL);
@@ -40,10 +40,10 @@ yscore_clear            (tSCORE_TABLE *a_table, short *r_max, char r_terse [LEN_
    if (r_report != NULL)  strlcpy (r_report, "", LEN_FULL);
    if (r_poly   != NULL)  strlcpy (r_poly  , "", LEN_FULL);
    /*---(defense)------------------------*/
-   DEBUG_YENV   yLOG_spoint  (a_table);
+   DEBUG_YSCORE   yLOG_spoint  (a_table);
    --rce;  if (a_table == NULL) {
       yURG_err ('w', "scoring clear called without scoring table");
-      DEBUG_YENV   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_YSCORE   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(create)-------------------------*/
@@ -100,7 +100,7 @@ yscore_clear            (tSCORE_TABLE *a_table, short *r_max, char r_terse [LEN_
    if (r_report != NULL)  strlcpy (r_report, x_report, LEN_FULL);
    if (r_poly   != NULL)  strlcpy (r_poly  , x_poly  , LEN_FULL);
    /*---(complete)-----------------------*/
-   DEBUG_YENV   yLOG_sexit   (__FUNCTION__);
+   DEBUG_YSCORE   yLOG_sexit   (__FUNCTION__);
    return 0;
 }
 

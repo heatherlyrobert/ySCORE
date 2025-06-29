@@ -38,8 +38,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "2.--, production"
 #define     P_VERMINOR  "2.0-, drawing from yENV in separate library"
-#define     P_VERNUM    "2.0c"
-#define     P_VERTXT    "yscore_mark capability working and unit tested"
+#define     P_VERNUM    "2.0d"
+#define     P_VERTXT    "audit migrated and updated, and unit tested"
 /*········· ··········· ´·····························´········································*/
 #define     P_PRIORITY  "direct, simple, brief, vigorous, and lucid (h.w. fowler)"
 #define     P_PRINCIPAL "[grow a set] and build your wings on the way down (r. bradbury)"
@@ -58,6 +58,7 @@
 
 #include    <yLOG.h>
 #include    <yURG.h>
+#include    <ySTR.h>
 
 
 typedef  struct cSCORE  tSCORE;
@@ -77,7 +78,7 @@ extern char  g_print      [LEN_RECD];
 
 
 
-extern const tSCORE_TABLE mySCORE_test [LEN_FULL];
+/*> extern const tSCORE_TABLE mySCORE_test [LEN_FULL];                                <*/
 
 
 
@@ -89,6 +90,13 @@ extern const tSCORE_TABLE mySCORE_test [LEN_FULL];
 #define     RC_WARNING      4
 #define     RC_FAILED       5
 #define     RC_FATAL        5   /* depricated */
+
+
+
+/*===[[ yENV_table.c ]]=======================================================*/
+/*········· ´······················ ´·········································*/
+char        yscore_data      (short n, char r_label [LEN_TERSE], char *r_default, char *r_sample, char r_print [LEN_TERSE], char r_desc [LEN_DESC], char r_valid [LEN_LABEL], char r_legend [LEN_FULL]);
+/*---(done)-----------------*/
 
 
 
@@ -106,12 +114,28 @@ char        yscore_pos_accum        (tSCORE_TABLE *a_table, char a_type, short n
 
 /*===[[ yENV_mark.c ]]========================================================*/
 /*········· ´······················ ´·········································*/
+/*---(valid)----------------*/
+char        yscore_valid            (char a_valid [LEN_LABEL], char r_valid [LEN_HUND]);
+/*---(mark)-----------------*/
 char        yscore_mark             (tSCORE_TABLE *a_table, char a_label [LEN_TERSE], uchar a_mark, char b_terse [LEN_FULL], char b_score [LEN_FULL], char b_report [LEN_FULL], char b_poly [LEN_FULL]);
 char        yscore_value            (tSCORE_TABLE *a_table, char a_label [LEN_TERSE], char a_score [LEN_FULL]);
+/*---(mask)-----------------*/
+char        yscore_mask             (tSCORE_TABLE *a_table, char a_beg [LEN_TERSE], char a_end [LEN_TERSE], char b_terse [LEN_FULL], char b_score [LEN_FULL], char b_report [LEN_FULL], char b_poly [LEN_FULL]);
 /*---(done)-----------------*/
 
 
-char       yscore_data      (short n, char r_label [LEN_TERSE], char *r_default, char *r_sample, char r_print [LEN_TERSE], char r_desc [LEN_DESC], char r_valid [LEN_LABEL], char r_legend [LEN_FULL]);
+
+/*===[[ yENV_mark.c ]]========================================================*/
+/*········· ´······················ ´·········································*/
+char        yscore__audit_sample    (short n, uchar a_sample);
+char        yscore__audit_def       (short n, uchar a_sample, uchar a_default);
+char        yscore__audit_label     (short n, uchar s_sample, char s_label [LEN_TERSE]);
+char        yscore__audit_print     (short n, uchar a_sample, char a_print [LEN_TERSE]);
+char        yscore__audit_valid     (short n, uchar a_sample, char a_valid [LEN_LABEL]);
+char        yscore__audit_line      (short n, char a_label [LEN_TERSE], char a_default, char a_sample, char a_print [LEN_TERSE], char a_valid [LEN_LABEL], char a_desc [LEN_TERSE], char a_legend [LEN_TERSE]);
+char        yscore__audit_dup       (tSCORE_TABLE *a_table, char n, char a_label [LEN_TERSE]);
+char        yscore__audit           (tSCORE_TABLE *a_table, char c_loud);
+/*---(done)-----------------*/
 
 
 
@@ -133,12 +157,6 @@ char        yenv_score_mask         (char a_beg [LEN_TERSE], char a_end [LEN_TER
 char        yenv_score_nocheck      (void);
 char        yenv_score_nohacked     (void);
 /*---(auditing)-------------*/
-char        yenv_score__asample     (short n, uchar a_sample);
-char        yenv_score__adefault    (short n, uchar a_sample, uchar a_default);
-char        yenv_score__alabel      (short n, uchar s_sample, char s_label [LEN_TERSE]);
-char        yenv_score__aprint      (short n, uchar a_sample, char a_print [LEN_TERSE]);
-char        yenv_score__aline       (short n, char a_label [LEN_TERSE], char a_default, char a_sample, char a_print [LEN_TERSE], char a_desc [LEN_TERSE], char a_legend [LEN_TERSE]);
-char        yenv_score__adup        (tSCORE_TABLE *a_table, char n, char a_label [LEN_TERSE]);
 char        yenv_score_audit        (void);
 /*---(legend)---------------*/
 char*       yenv_score__legend      (tSCORE_TABLE *a_table, char a_line, char a_label [LEN_TERSE], char a_terse [LEN_FULL]);
@@ -149,9 +167,9 @@ char*       yenv_score_legend       (char a_line, char a_label [LEN_TERSE]);
 
 /*===[[ yENV_test.c ]]========================================================*/
 /*········· ´······················ ´·········································*/
-char        yscore_unit_quiet       (void);
-char        yscore_unit_loud        (void);
-char        yscore_unit_end         (void);
+/*> char        yscore_unit_quiet       (void);                                       <*/
+/*> char        yscore_unit_loud        (void);                                       <*/
+/*> char        yscore_unit_end         (void);                                       <*/
 /*---(done)-----------------*/
 
 

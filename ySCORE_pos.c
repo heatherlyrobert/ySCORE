@@ -29,11 +29,7 @@ yscore_pos__next        (short n, char a_sample, short *b_tpos, short *b_spos, s
       if (b_ppos != NULL)   *b_ppos = 0;
       return 0;
    }
-   /*---(defaults)-----------------------*/
-   /*> if (n == 0)  x_lead = 'y';                                                     <*/
    /*---(set increment)------------------*/
-   /*> if (a_sample == 0 && x_lead != 'y')     p = 3;                                 <* 
-    *> else                                    p = 1;                                 <*/
    switch (a_sample) {
    case  0  :   t = 0;   s = 4;   r = 1;   p = 1;   break;
    case  1  :   t = 1;   s = 1;   r = 1;   p = 1;   break;
@@ -63,7 +59,7 @@ yscore_pos              (tSCORE_TABLE *a_table, short a_max, char a_label [LEN_T
    char        x_good      =  '-';
    char        x_max       = LEN_FULL;
    /*---(header)-------------------------*/
-   DEBUG_YENV   yLOG_enter   (__FUNCTION__);
+   DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
    /*---(default)------------------------*/
    if (r_index != NULL)  *r_index = -1;
    if (r_tpos  != NULL)  *r_tpos  = -1;
@@ -71,22 +67,22 @@ yscore_pos              (tSCORE_TABLE *a_table, short a_max, char a_label [LEN_T
    if (r_rpos  != NULL)  *r_rpos  = -1;
    if (r_ppos  != NULL)  *r_ppos  = -1;
    /*---(defense)------------------------*/
-   DEBUG_YENV   yLOG_point   ("a_table"   , a_table);
+   DEBUG_YSCORE   yLOG_point   ("a_table"   , a_table);
    --rce;  if (a_table == NULL) {
-      yURG_err ('w', "scoring pos called without scoring table");
-      DEBUG_YENV   yLOG_exitr   (__FUNCTION__, rce);
+      yURG_err ('w', "ySCORE, scoring pos called for without configuring a scoring table (ySCORE_init)");
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_YENV   yLOG_point   ("a_label"   , a_label);
+   DEBUG_YSCORE   yLOG_point   ("a_label"   , a_label);
    --rce;  if (a_label == NULL || strlen (a_label) <= 0) {
-      yURG_err ('w', "scoring pos called with label NULL/empty");
-      DEBUG_YENV   yLOG_exitr   (__FUNCTION__, rce);
+      yURG_err ('w', "ySCORE, scoring pos called, but called with label NULL/empty (illegal)");
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_YENV   yLOG_info    ("a_label"   , a_label);
+   DEBUG_YSCORE   yLOG_info    ("a_label"   , a_label);
    --rce;  if (a_label [0] == ' ') {
-      yURG_err ('w', "scoring pos called with non-unique spacer label");
-      DEBUG_YENV   yLOG_exitr   (__FUNCTION__, rce);
+      yURG_err ('w', "ySCORE, scoring pos called for a non-unique spacer label (illegal)");
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    /*---(initialize)---------------------*/
@@ -100,7 +96,7 @@ yscore_pos              (tSCORE_TABLE *a_table, short a_max, char a_label [LEN_T
       if (strncmp (a_table [i].s_label, "end-", 4) == 0)  break;
       /*---(drop-out)--------------------*/
       if (strcmp (a_table [i].s_label, a_label) == 0) {
-         DEBUG_YENV   yLOG_value   ("FOUND"     , i);
+         DEBUG_YSCORE   yLOG_value   ("FOUND"     , i);
          x_good = 'y';
          break;
       }
@@ -110,13 +106,14 @@ yscore_pos              (tSCORE_TABLE *a_table, short a_max, char a_label [LEN_T
       /*---(done)------------------------*/
    }
    /*---(check for trouble)--------------*/
-   DEBUG_YENV   yLOG_value   ("i"         , i);
-   DEBUG_YENV   yLOG_value   ("s"         , s);
-   DEBUG_YENV   yLOG_value   ("t"         , t);
-   DEBUG_YENV   yLOG_value   ("r"         , r);
-   DEBUG_YENV   yLOG_value   ("p"         , p);
+   DEBUG_YSCORE   yLOG_value   ("i"         , i);
+   DEBUG_YSCORE   yLOG_value   ("s"         , s);
+   DEBUG_YSCORE   yLOG_value   ("t"         , t);
+   DEBUG_YSCORE   yLOG_value   ("r"         , r);
+   DEBUG_YSCORE   yLOG_value   ("p"         , p);
    --rce;  if (x_good != 'y') {
-      DEBUG_YENV    yLOG_exitr   (__FUNCTION__, rce);
+      yURG_err ('w', "ySCORE, scoring pos called, but label å%sæ does not exist in scoring table", a_label);
+      DEBUG_YSCORE    yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    /*---(default)------------------------*/
@@ -126,7 +123,7 @@ yscore_pos              (tSCORE_TABLE *a_table, short a_max, char a_label [LEN_T
    if (r_rpos  != NULL)  *r_rpos  = r;
    if (r_ppos  != NULL)  *r_ppos  = p;
    /*---(complete)-----------------------*/
-   DEBUG_YENV    yLOG_exit    (__FUNCTION__);
+   DEBUG_YSCORE    yLOG_exit    (__FUNCTION__);
    return 1;
 }
 
