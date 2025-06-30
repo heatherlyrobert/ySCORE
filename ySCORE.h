@@ -15,7 +15,7 @@ struct cSCORE_TABLE {
    char        s_sample;  
    char        s_print     [LEN_LABEL];  
    char        s_desc      [LEN_DESC];
-   char        s_valid     [LEN_LABEL];
+   char        s_valid     [LEN_TITLE];
    char        s_legend    [LEN_FULL];
 };
 typedef   struct   cSCORE_TABLE   tSCORE_TABLE;

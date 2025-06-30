@@ -13,7 +13,7 @@
 
 
 char
-yscore_valid            (char a_valid [LEN_LABEL], char r_valid [LEN_HUND])
+yscore_valid            (char a_valid [LEN_TITLE], char r_valid [LEN_HUND])
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -114,7 +114,7 @@ yscore_mark             (tSCORE_TABLE *a_table, char a_label [LEN_TERSE], uchar 
    short       r           =   -1;
    short       p           =   -1;
    char        x_label     [LEN_TERSE] = "";
-   char        x_valid     [LEN_TERSE] = "";
+   char        x_valid     [LEN_TITLE] = "";
    char        x_full      [LEN_HUND]  = "";
    char        x_final     =    1;
    /*---(header)-------------------------*/

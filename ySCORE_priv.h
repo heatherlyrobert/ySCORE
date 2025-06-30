@@ -38,8 +38,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "2.--, production"
 #define     P_VERMINOR  "2.0-, drawing from yENV in separate library"
-#define     P_VERNUM    "2.0e"
-#define     P_VERTXT    "all functions ported and unit tested"
+#define     P_VERNUM    "2.0f"
+#define     P_VERTXT    "fully integrated into yENV audit/name functions and unit tested"
 /*········· ··········· ´·····························´········································*/
 #define     P_PRIORITY  "direct, simple, brief, vigorous, and lucid (h.w. fowler)"
 #define     P_PRINCIPAL "[grow a set] and build your wings on the way down (r. bradbury)"
@@ -144,7 +144,7 @@ char*       yscore__legend          (tSCORE_TABLE *a_table, char a_line, char a_
 /*===[[ yENV_table.c ]]=======================================================*/
 /*········· ´······················ ´·········································*/
 char        yscore_clear            (tSCORE_TABLE *a_table, short *r_max, char r_terse [LEN_FULL], char r_score [LEN_FULL], char r_full [LEN_FULL], char r_report [LEN_FULL], char r_poly [LEN_FULL]);
-char        yscore_data             (short n, char r_label [LEN_TERSE], char *r_default, char *r_sample, char r_print [LEN_TERSE], char r_desc [LEN_DESC], char r_valid [LEN_LABEL], char r_legend [LEN_FULL]);
+char        yscore_data             (short n, char r_label [LEN_TERSE], char *r_default, char *r_sample, char r_print [LEN_TERSE], char r_desc [LEN_DESC], char r_valid [LEN_TITLE], char r_legend [LEN_FULL]);
 /*---(done)-----------------*/
 
 

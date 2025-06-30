@@ -107,7 +107,7 @@ yscore_clear            (tSCORE_TABLE *a_table, short *r_max, char r_terse [LEN_
 char ySCORE_clear            (void) { return yscore_clear (mySCORE.m_table, &(mySCORE.m_max), mySCORE.o_terse, mySCORE.o_score, mySCORE.o_full, mySCORE.o_report, mySCORE.o_poly); }
 
 char
-yscore_data      (short n, char r_label [LEN_TERSE], char *r_default, char *r_sample, char r_print [LEN_TERSE], char r_desc [LEN_DESC], char r_valid [LEN_LABEL], char r_legend [LEN_FULL])
+yscore_data      (short n, char r_label [LEN_TERSE], char *r_default, char *r_sample, char r_print [LEN_TERSE], char r_desc [LEN_DESC], char r_valid [LEN_TITLE], char r_legend [LEN_FULL])
 {
    char        rce         =  -10;
    if (r_label   != NULL)   strcpy (r_label   , "");
@@ -124,7 +124,7 @@ yscore_data      (short n, char r_label [LEN_TERSE], char *r_default, char *r_sa
    if (r_sample  != NULL)   *r_sample  = (mySCORE.m_table) [n].s_sample;
    if (r_print   != NULL)   strlcpy (r_print   , (mySCORE.m_table) [n].s_print   , LEN_TERSE);
    if (r_desc    != NULL)   strlcpy (r_desc    , (mySCORE.m_table) [n].s_desc    , LEN_DESC);
-   if (r_valid   != NULL)   strlcpy (r_valid   , (mySCORE.m_table) [n].s_valid   , LEN_LABEL);
+   if (r_valid   != NULL)   strlcpy (r_valid   , (mySCORE.m_table) [n].s_valid   , LEN_TITLE);
    if (r_legend  != NULL)   strlcpy (r_legend  , (mySCORE.m_table) [n].s_legend  , LEN_FULL);
    return 0;
 }
