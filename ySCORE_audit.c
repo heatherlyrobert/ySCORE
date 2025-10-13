@@ -384,5 +384,28 @@ yscore__audit           (tSCORE_TABLE *a_table, char c_loud)
    return rc_final;
 }
 
-char ySCORE_audit   (void)  { return yscore__audit (mySCORE.m_table, 'y'); }
+char
+ySCORE_audit            (tSCORE *a_cur)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   /*---(header)-------------------------*/
+   DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
+   /*---(check return)-------------------*/
+   DEBUG_YSCORE   yLOG_point   ("a_cur"     , a_cur);
+   --rce;  if (a_cur == NULL) {
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   rc = yscore__audit (a_cur->m_table, 'y');
+   DEBUG_YSCORE   yLOG_value   ("audit"     , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(complete)-----------------------*/
+   DEBUG_YSCORE   yLOG_sexit   (__FUNCTION__);
+   return 1;
+}
 

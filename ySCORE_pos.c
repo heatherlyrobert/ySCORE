@@ -106,7 +106,6 @@ yscore_pos              (tSCORE_TABLE *a_table, short a_max, char a_label [LEN_T
    }
    /*---(initialize)---------------------*/
    if      (a_max >  0)  x_max = a_max;
-   else if (a_max == 0)  x_max = mySCORE.m_max;
    else                  x_max = LEN_FULL;
    rc = yscore_pos__next (-1, -1, &t, &s, &r, &p);
    /*---(position)-----------------------*/
@@ -143,6 +142,31 @@ yscore_pos              (tSCORE_TABLE *a_table, short a_max, char a_label [LEN_T
    if (r_ppos  != NULL)  *r_ppos  = p;
    /*---(complete)-----------------------*/
    DEBUG_YSCORE    yLOG_exit    (__FUNCTION__);
+   return 1;
+}
+
+char
+ySCORE_pos              (tSCORE *a_cur, char a_label [LEN_TERSE], short *r_index, short *r_tpos, short *r_spos, short *r_rpos, short *r_ppos)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   /*---(header)-------------------------*/
+   DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
+   /*---(check return)-------------------*/
+   DEBUG_YSCORE   yLOG_point   ("a_cur"     , a_cur);
+   --rce;  if (a_cur == NULL) {
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   rc = yscore_pos (a_cur->m_table, a_cur->m_max, a_label, r_index, r_tpos, r_spos, r_rpos, r_ppos);
+   DEBUG_YSCORE   yLOG_value   ("pos"       , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(complete)-----------------------*/
+   DEBUG_YSCORE   yLOG_exit    (__FUNCTION__);
    return 1;
 }
 

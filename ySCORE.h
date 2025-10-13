@@ -20,11 +20,31 @@ struct cSCORE_TABLE {
 };
 typedef   struct   cSCORE_TABLE   tSCORE_TABLE;
 
+typedef  struct cSCORE  tSCORE;
+struct cSCORE {
+   tSCORE_TABLE  *m_table;                  /* data table                     */
+   char           m_validity;               /* perform validity check         */
+   short          m_max;                    /* maximum entries in table       */
+   char           o_terse      [LEN_FULL];
+   char           o_score      [LEN_FULL];
+   char           o_full       [LEN_FULL];
+   char           o_report     [LEN_FULL];
+   char           o_poly       [LEN_FULL];
+};
+
+
+struct cSCORE_STATS {
+   int         s_value;
+   char        s_rating;
+};
+typedef   struct   cSCORE_STATS   tSCORE_STATS;
+
+
 
 
 /*===[[ yENV_audit.c ]]=======================================================*/
 /*········· ´······················ ´·········································*/
-char        ySCORE_audit            (void);
+char        ySCORE_audit            (tSCORE *a_cur);
 /*---(done)-----------------*/
 
 
@@ -39,23 +59,30 @@ char*       ySCORE_version          (void);
 
 /*===[[ yENV_mark.c ]]========================================================*/
 /*········· ´······················ ´·········································*/
-char        ySCORE_mark             (char a_label [LEN_TERSE], uchar a_mark);
-char        ySCORE_value            (char a_label [LEN_TERSE]);
-char        ySCORE_mask             (char a_beg [LEN_TERSE], char a_end [LEN_TERSE]);
+char        ySCORE_mark             (tSCORE *a_cur, char a_label [LEN_TERSE], uchar a_mark);
+char        ySCORE_value            (tSCORE *a_cur, char a_label [LEN_TERSE]);
+char        ySCORE_mask             (tSCORE *a_cur, char a_beg [LEN_TERSE], char a_end [LEN_TERSE]);
+/*---(done)-----------------*/
+
+
+
+/*===[[ yENV_mark.c ]]========================================================*/
+/*········· ´······················ ´·········································*/
+char        ySCORE_pos              (tSCORE *a_cur, char a_label [LEN_TERSE], short *r_index, short *r_tpos, short *r_spos, short *r_rpos, short *r_ppos);
 /*---(done)-----------------*/
 
 
 
 /*===[[ yENV_rptg.c ]]========================================================*/
 /*---(output)-------------------------*/
-char*       ySCORE_terse            (void);
-char*       ySCORE_score            (void);
-char*       ySCORE_full             (void);
-char*       ySCORE_report           (void);
-char*       ySCORE_poly             (void);
-char*       ySCORE_title            (char a_type);
-char*       ySCORE_header           (char n);
-char*       ySCORE_legend           (char a_line, char a_label [LEN_TERSE]);
+char*       ySCORE_terse            (tSCORE *a_cur);
+char*       ySCORE_score            (tSCORE *a_cur);
+char*       ySCORE_full             (tSCORE *a_cur);
+char*       ySCORE_report           (tSCORE *a_cur);
+char*       ySCORE_poly             (tSCORE *a_cur);
+char*       ySCORE_title            (tSCORE *a_cur, char a_type);
+char*       ySCORE_header           (tSCORE *a_cur, char n);
+char*       ySCORE_legend           (tSCORE *a_cur, char a_line, char a_label [LEN_TERSE]);
 /*---(done)-----------------*/
 
 
@@ -63,8 +90,9 @@ char*       ySCORE_legend           (char a_line, char a_label [LEN_TERSE]);
 /*===[[ yENV_table.c ]]=======================================================*/
 /*········· ´······················ ´·········································*/
 /*---(program)------------------------*/
-char        ySCORE_init             (tSCORE_TABLE *a_table);
-char        ySCORE_clear            (void);
+char        ySCORE_init             (tSCORE_TABLE *a_table, char a_validity, tSCORE **b_table);
+char        ySCORE_clear            (tSCORE *b_cur);
+char        ySCORE_wrap             (tSCORE **b_old);
 /*---(done)-----------------*/
 
 

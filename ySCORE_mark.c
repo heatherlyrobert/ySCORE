@@ -103,7 +103,7 @@ yscore_valid            (char a_valid [LEN_TITLE], char r_valid [LEN_HUND])
 static void      o___MARK__________o (void) {;};
 
 char
-yscore_mark             (tSCORE_TABLE *a_table, char a_label [LEN_TERSE], uchar a_mark, char b_terse [LEN_FULL], char b_score [LEN_FULL], char b_report [LEN_FULL], char b_poly [LEN_FULL])
+yscore_mark             (tSCORE *a_cur, tSCORE_TABLE *a_table, char c_validity, char a_label [LEN_TERSE], uchar a_mark, char b_terse [LEN_FULL], char b_score [LEN_FULL], char b_report [LEN_FULL], char b_poly [LEN_FULL])
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -130,11 +130,10 @@ yscore_mark             (tSCORE_TABLE *a_table, char a_label [LEN_TERSE], uchar 
    rc = yscore_pos (a_table, 0, a_label, &n, &t, &s, &r, &p);
    DEBUG_YSCORE   yLOG_value   ("pos"       , rc);
    --rce;  if (rc < 0) {
-      yURG_err ('w', "scoring mark å%sæ, label does not exist in scoring table", a_label);
       DEBUG_YSCORE    yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
-   /*---(get validity)-------------------*/
+   /*---(get mark in general)------------*/
    DEBUG_YSCORE   yLOG_value   ("a_mark"    , a_mark);
    --rce;  if (a_mark    <= 32 || a_mark == 127) {
       yURG_err ('w', "scoring mark å%sæ, called with hidden/control (%3d)", a_label, a_mark);
@@ -142,13 +141,17 @@ yscore_mark             (tSCORE_TABLE *a_table, char a_label [LEN_TERSE], uchar 
       x_final = 0;
    }
    DEBUG_YSCORE   yLOG_char    ("a_mark"    , a_mark);
-   rc = yscore_data (n, x_label, NULL, NULL, NULL, NULL, x_valid, NULL);
-   DEBUG_YSCORE   yLOG_info    ("x_valid"   , x_valid);
-   rc = yscore_valid (x_valid, x_full);
-   --rce;  if (a_mark != (uchar) '¤' && strchr (x_full, a_mark) == NULL) {
-      yURG_err ('w', "scoring mark å%sæ, called with unrecognized value (%c) å%sæ", a_label, a_mark, x_valid);
-      a_mark = '¤';
-      x_final = 0;
+   /*---(get validity)-------------------*/
+   DEBUG_YSCORE   yLOG_char    ("m_validity", c_validity);
+   if (c_validity == 'y') {
+      rc = yscore_data (a_cur, n, x_label, NULL, NULL, NULL, NULL, x_valid, NULL);
+      DEBUG_YSCORE   yLOG_info    ("x_valid"   , x_valid);
+      rc = yscore_valid (x_valid, x_full);
+      --rce;  if (a_mark != (uchar) '¤' && strchr (x_full, a_mark) == NULL) {
+         yURG_err ('w', "scoring mark å%sæ, called with unrecognized value (%c) å%sæ", a_label, a_mark, x_valid);
+         a_mark = '¤';
+         x_final = 0;
+      }
    }
    /*---(update terse)-------------------*/
    if (b_terse != NULL) {
@@ -179,7 +182,30 @@ yscore_mark             (tSCORE_TABLE *a_table, char a_label [LEN_TERSE], uchar 
    return x_final;
 }
 
-char ySCORE_mark        (char a_label [LEN_TERSE], uchar a_mark)  { return yscore_mark   (mySCORE.m_table , a_label, a_mark, mySCORE.o_terse, mySCORE.o_score, mySCORE.o_report, mySCORE.o_poly); }
+char
+ySCORE_mark             (tSCORE *a_cur, char a_label [LEN_TERSE], uchar a_mark)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   /*---(header)-------------------------*/
+   DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
+   /*---(check return)-------------------*/
+   DEBUG_YSCORE   yLOG_point   ("a_cur"     , a_cur);
+   --rce;  if (a_cur == NULL) {
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   rc = yscore_mark   (a_cur, a_cur->m_table, a_cur->m_validity, a_label, a_mark, a_cur->o_terse, a_cur->o_score, a_cur->o_report, a_cur->o_poly);
+   DEBUG_YSCORE   yLOG_value   ("mark"      , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(complete)-----------------------*/
+   DEBUG_YSCORE   yLOG_exit    (__FUNCTION__);
+   return 1;
+}
 
 char
 yscore_value            (tSCORE_TABLE *a_table, char a_label [LEN_TERSE], char a_score [LEN_FULL])
@@ -207,7 +233,6 @@ yscore_value            (tSCORE_TABLE *a_table, char a_label [LEN_TERSE], char a
    rc = yscore_pos (a_table, 0, a_label, NULL, NULL, &s, NULL, NULL);
    DEBUG_YSCORE   yLOG_value   ("pos"       , rc);
    --rce;  if (rc < 0) {
-      yURG_err ('w', "scoring value å%sæ, label does not exist in scoring table", a_label);
       DEBUG_YSCORE    yLOG_exitr   (__FUNCTION__, rce);
       return '¤';
    }
@@ -220,7 +245,30 @@ yscore_value            (tSCORE_TABLE *a_table, char a_label [LEN_TERSE], char a
    return x_value;
 }
 
-char ySCORE_value      (char a_label [LEN_TERSE])  { return yscore_value (mySCORE.m_table , a_label, mySCORE.o_score); }
+char
+ySCORE_value            (tSCORE *a_cur, char a_label [LEN_TERSE])
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   /*---(header)-------------------------*/
+   DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
+   /*---(check return)-------------------*/
+   DEBUG_YSCORE   yLOG_point   ("a_cur"     , a_cur);
+   --rce;  if (a_cur == NULL) {
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   rc = yscore_value (a_cur->m_table , a_label, a_cur->o_score);
+   DEBUG_YSCORE   yLOG_value   ("mark"      , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(complete)-----------------------*/
+   DEBUG_YSCORE   yLOG_exit    (__FUNCTION__);
+   return 1;
+}
 
 
 
@@ -262,9 +310,29 @@ yscore_mask             (tSCORE_TABLE *a_table, char a_beg [LEN_TERSE], char a_e
    return 0;
 }
 
-char ySCORE_mask             (char a_beg [LEN_TERSE], char a_end [LEN_TERSE])  { yscore_mask (mySCORE.m_table, a_beg, a_end, mySCORE.o_terse, mySCORE.o_score, mySCORE.o_report, mySCORE.o_poly); }
-
-/*> char yenv_score_nocheck      (void) { return yENV_score_mask ("PRá "      , "FIXES"     ); }   <*/
-/*> char yenv_score_nohacked     (void) { return yENV_score_mask ("HKá "      , "HACKED"    ); }   <*/
+char
+ySCORE_mask             (tSCORE *a_cur, char a_beg [LEN_TERSE], char a_end [LEN_TERSE])
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   /*---(header)-------------------------*/
+   DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
+   /*---(check return)-------------------*/
+   DEBUG_YSCORE   yLOG_point   ("a_cur"     , a_cur);
+   --rce;  if (a_cur == NULL) {
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   rc = yscore_mask (a_cur->m_table, a_beg, a_end, a_cur->o_terse, a_cur->o_score, a_cur->o_report, a_cur->o_poly);
+   DEBUG_YSCORE   yLOG_value   ("mask"      , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(complete)-----------------------*/
+   DEBUG_YSCORE   yLOG_exit    (__FUNCTION__);
+   return 1;
+}
 
 

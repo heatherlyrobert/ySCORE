@@ -4,7 +4,7 @@
 
 
 
-tSCORE      mySCORE = { NULL, -1, "", "", "", "", "" };
+tSCORE      mySCORE = { NULL, 'y', -1, "", "", "", "", "" };
 char        g_print     [LEN_RECD]  = "";
 
 

@@ -3,17 +3,47 @@
 #include    "ySCORE_priv.h"
 
 
+char*
+yscore_output           (tSCORE *a_cur, char a_which)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   char       *x_output    = NULL;
+   /*---(header)-------------------------*/
+   DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
+   /*---(check return)-------------------*/
+   DEBUG_YSCORE   yLOG_point   ("a_cur"     , a_cur);
+   --rce;  if (a_cur == NULL) {
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+      return "(no table)";
+   }
+   DEBUG_YSCORE   yLOG_char    ("a_which"   , a_which);
+   switch (a_which) {
+   case 't' :  x_output = a_cur->o_terse;    break;
+   case 's' :  x_output = a_cur->o_score;    break;
+   case 'f' :  x_output = a_cur->o_full;     break;
+   case 'r' :  x_output = a_cur->o_report;   break;
+   case 'p' :  x_output = a_cur->o_poly;     break;
+   default  :  x_output = "(unknown type)";
+   }
+   DEBUG_YSCORE   yLOG_info    ("x_output"  , x_output);
+   /*---(complete)-----------------------*/
+   DEBUG_YSCORE   yLOG_exit    (__FUNCTION__);
+   return x_output;
+}
 
-char*   ySCORE_terse      (void)  { return mySCORE.o_terse;  }
-char*   ySCORE_score      (void)  { return mySCORE.o_score;  }
-char*   ySCORE_full       (void)  { return mySCORE.o_full;   }
-char*   ySCORE_report     (void)  { return mySCORE.o_report; }
-char*   ySCORE_poly       (void)  { return mySCORE.o_poly;   }
+
+char*   ySCORE_terse      (tSCORE *a_cur)  { return yscore_output (a_cur, 't'); }
+char*   ySCORE_score      (tSCORE *a_cur)  { return yscore_output (a_cur, 's'); }
+char*   ySCORE_full       (tSCORE *a_cur)  { return yscore_output (a_cur, 'f'); }
+char*   ySCORE_report     (tSCORE *a_cur)  { return yscore_output (a_cur, 'r'); }
+char*   ySCORE_poly       (tSCORE *a_cur)  { return yscore_output (a_cur, 'p'); }
 
 
 
 char*
-yscore__title           (tSCORE_TABLE *a_table, char a_type)
+yscore__title           (tSCORE *a_cur, tSCORE_TABLE *a_table, char a_type)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -37,10 +67,10 @@ yscore__title           (tSCORE_TABLE *a_table, char a_type)
    /*---(make base)----------------------*/
    DEBUG_YSCORE   yLOG_char    ("a_type"    , a_type);
    --rce;  switch (a_type) {
-   case 't'  :  x_max = strlen (mySCORE.o_terse ); break;
-   case 's'  :  x_max = strlen (mySCORE.o_score ); break;
-   case 'r'  :  x_max = strlen (mySCORE.o_report); break;
-   case 'p'  :  x_max = strlen (mySCORE.o_poly  ); break;
+   case 't'  :  x_max = strlen (a_cur->o_terse ); break;
+   case 's'  :  x_max = strlen (a_cur->o_score ); break;
+   case 'r'  :  x_max = strlen (a_cur->o_report); break;
+   case 'p'  :  x_max = strlen (a_cur->o_poly  ); break;
    default   :
                    DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
                    return "(bad type)";
@@ -56,7 +86,7 @@ yscore__title           (tSCORE_TABLE *a_table, char a_type)
       /*---(test for end)----------------*/
       if (strncmp (a_table [i].s_label, "end-", 4) == 0) {
          DEBUG_YSCORE   yLOG_note    ("hit end-list");
-         if (g_print [x_max - 1] == '²')  g_print [x_max - 1] = '‚';
+         if (strchr ("² ", g_print [x_max - 1]) != NULL)  g_print [x_max - 1] = '‚';
          break;
       }
       /*---(accumulate)------------------*/
@@ -81,7 +111,9 @@ yscore__title           (tSCORE_TABLE *a_table, char a_type)
          }
          if (a_type == 'r')  o = x_curr;
          else                o = x_prev;
-         for (j = o + l; j < x_max; ++j)   g_print [j] = '²';
+         for (j = o + l; j < x_max; ++j)  {
+            if (strchr ("² ", g_print [j]) != NULL)  g_print [j] = '²';
+         }
       }
       /*---(large space)----------------*/
       if (a_table [i].s_sample == 3) {
@@ -90,8 +122,10 @@ yscore__title           (tSCORE_TABLE *a_table, char a_type)
          if      (a_type == 'r')  o = x_curr - 3;
          else if (a_type == 'p')  o = x_prev;
          else                     o = x_prev - 1;
-         for (j = o + l; j < x_max; ++j)   g_print [j] = ' ';
-         g_print [o] = '‚';
+         for (j = o + l; j < x_max; ++j) {
+            if (strchr ("² ", g_print [j]) != NULL)  g_print [j] = ' ';
+         }
+         if (strchr ("² ", g_print [o]) != NULL)  g_print [o] = '‚';
       }
       /*---(save position)---------------*/
       x_prev = x_curr;
@@ -102,7 +136,26 @@ yscore__title           (tSCORE_TABLE *a_table, char a_type)
    return g_print;
 }
 
-char* ySCORE_title  (char a_type) { return yscore__title (mySCORE.m_table , a_type); }
+char*
+ySCORE_title            (tSCORE *a_cur, char a_type)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   /*---(header)-------------------------*/
+   DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
+   /*---(check return)-------------------*/
+   DEBUG_YSCORE   yLOG_point   ("a_cur"     , a_cur);
+   --rce;  if (a_cur == NULL) {
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+      return "(no table)";
+   }
+   /*---(complete)-----------------------*/
+   DEBUG_YSCORE   yLOG_exit    (__FUNCTION__);
+   yscore__title (a_cur, a_cur->m_table , a_type);
+   /*---(complete)-----------------------*/
+   return g_print;
+}
 
 char*
 yscore__header          (tSCORE_TABLE *a_table, char n)
@@ -155,7 +208,25 @@ yscore__header          (tSCORE_TABLE *a_table, char n)
    return g_print;
 }
 
-char* ySCORE_header   (char n)   { return yscore__header  (mySCORE.m_table , n); }
+char*
+ySCORE_header           (tSCORE *a_cur, char n) 
+{ 
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   /*---(header)-------------------------*/
+   DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
+   /*---(check return)-------------------*/
+   DEBUG_YSCORE   yLOG_point   ("a_cur"     , a_cur);
+   --rce;  if (a_cur == NULL) {
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+      return "(no table)";
+   }
+   yscore__header  (a_cur->m_table , n);
+   /*---(complete)-----------------------*/
+   DEBUG_YSCORE    yLOG_exit    (__FUNCTION__);
+   return g_print;
+}
 
 char*
 yscore__legend          (tSCORE_TABLE *a_table, char a_line, char a_label [LEN_TERSE], char a_terse [LEN_FULL])
@@ -327,6 +398,24 @@ yscore__legend          (tSCORE_TABLE *a_table, char a_line, char a_label [LEN_T
    return g_print;
 }
 
-char* ySCORE_legend (char a_line, char a_label [LEN_TERSE])  { return yscore__legend (mySCORE.m_table, a_line, a_label, mySCORE.o_terse); }
+char*
+ySCORE_legend           (tSCORE *a_cur, char a_line, char a_label [LEN_TERSE])
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   /*---(header)-------------------------*/
+   DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
+   /*---(check return)-------------------*/
+   DEBUG_YSCORE   yLOG_point   ("a_cur"     , a_cur);
+   --rce;  if (a_cur == NULL) {
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+      return "(no table)";
+   }
+   yscore__legend (a_cur->m_table, a_line, a_label, a_cur->o_terse);
+   /*---(complete)-----------------------*/
+   DEBUG_YSCORE    yLOG_exit    (__FUNCTION__);
+   return g_print;
+}
 
 
