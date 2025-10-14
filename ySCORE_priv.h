@@ -38,8 +38,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "2.--, production"
 #define     P_VERMINOR  "2.1-, integrate into yJOBS and others"
-#define     P_VERNUM    "2.1a"
-#define     P_VERTXT    "updated testing, simple fixing for ySCORE_audit, _base, _pos"
+#define     P_VERNUM    "2.1b"
+#define     P_VERTXT    "updated testing, simple fixing for final files ySCORE_mark, _rptg"
 /*········· ··········· ´·····························´········································*/
 #define     P_PRIORITY  "direct, simple, brief, vigorous, and lucid (h.w. fowler)"
 #define     P_PRINCIPAL "[grow a set] and build your wings on the way down (r. bradbury)"
@@ -116,7 +116,7 @@ char        yscore__audit           (tSCORE_TABLE *a_table, char c_loud);
 char        yscore_valid            (char a_valid [LEN_LABEL], char r_valid [LEN_HUND]);
 /*---(mark)-----------------*/
 char        yscore_mark             (tSCORE *a_cur, tSCORE_TABLE *a_table, char c_validity, char a_label [LEN_TERSE], uchar a_mark, char b_terse [LEN_FULL], char b_score [LEN_FULL], char b_report [LEN_FULL], char b_poly [LEN_FULL]);
-char        yscore_value            (tSCORE_TABLE *a_table, char a_label [LEN_TERSE], char a_score [LEN_FULL]);
+uchar       yscore_value            (tSCORE_TABLE *a_table, char a_label [LEN_TERSE], char a_score [LEN_FULL]);
 /*---(mask)-----------------*/
 char        yscore_mask             (tSCORE_TABLE *a_table, char a_beg [LEN_TERSE], char a_end [LEN_TERSE], char b_terse [LEN_FULL], char b_score [LEN_FULL], char b_report [LEN_FULL], char b_poly [LEN_FULL]);
 char        yenv_score_nocheck      (void);
