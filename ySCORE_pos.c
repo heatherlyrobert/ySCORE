@@ -71,12 +71,12 @@ yscore_pos              (tSCORE_TABLE *a_table, short a_max, char a_label [LEN_T
    char        rce         =  -10;
    char        rc          =    0;
    int         i           =    0;
-   short       t           =    0;
-   short       s           =    0;
-   short       r           =    0;
-   short       p           =    0;
+   short       t           =   -1;
+   short       s           =   -1;
+   short       r           =   -1;
+   short       p           =   -1;
    char        x_good      =  '-';
-   char        x_max       = LEN_FULL;
+   short       x_max       = LEN_FULL;
    /*---(header)-------------------------*/
    DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
    /*---(default)------------------------*/
@@ -104,14 +104,21 @@ yscore_pos              (tSCORE_TABLE *a_table, short a_max, char a_label [LEN_T
       DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
-   /*---(initialize)---------------------*/
+   /*---(set max)------------------------*/
    if      (a_max >  0)  x_max = a_max;
    else                  x_max = LEN_FULL;
+   DEBUG_YSCORE   yLOG_value   ("x_max"     , x_max);
+   /*---(initialize)---------------------*/
    rc = yscore_pos__next (-1, -1, &t, &s, &r, &p);
+   DEBUG_YSCORE   yLOG_value   ("intial"    , rc);
    /*---(position)-----------------------*/
    --rce;  for (i = 0; i < x_max; ++i) {
+      DEBUG_YSCORE   yLOG_complex ("check"     , "%3d) %s", i, a_table [i].s_label);
       /*---(test for end)----------------*/
-      if (strncmp (a_table [i].s_label, "end-", 4) == 0)  break;
+      if (strncmp (a_table [i].s_label, "end-", 4) == 0) {
+         DEBUG_YSCORE   yLOG_note    ("hit end of table sentinel");
+         break;
+      }
       /*---(drop-out)--------------------*/
       if (strcmp (a_table [i].s_label, a_label) == 0) {
          DEBUG_YSCORE   yLOG_value   ("FOUND"     , i);
@@ -120,7 +127,11 @@ yscore_pos              (tSCORE_TABLE *a_table, short a_max, char a_label [LEN_T
       }
       /*---(accumulate)------------------*/
       rc = yscore_pos__next (i, a_table [i].s_sample, &t, &s, &r, &p);
-      if (rc < 0)             return rce;
+      DEBUG_YSCORE   yLOG_value   ("next"      , rc);
+      if (rc < 0) {
+         DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+         return rce;
+      }
       /*---(done)------------------------*/
    }
    /*---(check for trouble)--------------*/

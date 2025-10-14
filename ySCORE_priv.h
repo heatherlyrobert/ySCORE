@@ -39,7 +39,7 @@
 #define     P_VERMAJOR  "2.--, production"
 #define     P_VERMINOR  "2.1-, integrate into yJOBS and others"
 #define     P_VERNUM    "2.1a"
-#define     P_VERTXT    "fixed simple non-compiles with malloc tables and unit-tested ySCORE_table"
+#define     P_VERTXT    "updated testing, simple fixing for ySCORE_audit, _base, _pos"
 /*········· ··········· ´·····························´········································*/
 #define     P_PRIORITY  "direct, simple, brief, vigorous, and lucid (h.w. fowler)"
 #define     P_PRINCIPAL "[grow a set] and build your wings on the way down (r. bradbury)"
