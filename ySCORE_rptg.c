@@ -34,11 +34,11 @@ yscore_output           (tSCORE *a_cur, char a_which)
 }
 
 
-char*   ySCORE_terse      (tSCORE *a_cur)  { return yscore_output (a_cur, 't'); }
-char*   ySCORE_score      (tSCORE *a_cur)  { return yscore_output (a_cur, 's'); }
-char*   ySCORE_full       (tSCORE *a_cur)  { return yscore_output (a_cur, 'f'); }
-char*   ySCORE_report     (tSCORE *a_cur)  { return yscore_output (a_cur, 'r'); }
-char*   ySCORE_poly       (tSCORE *a_cur)  { return yscore_output (a_cur, 'p'); }
+char*   ySCORE_terse      (void *a_cur)  { return yscore_output (a_cur, 't'); }
+char*   ySCORE_score      (void *a_cur)  { return yscore_output (a_cur, 's'); }
+char*   ySCORE_full       (void *a_cur)  { return yscore_output (a_cur, 'f'); }
+char*   ySCORE_report     (void *a_cur)  { return yscore_output (a_cur, 'r'); }
+char*   ySCORE_poly       (void *a_cur)  { return yscore_output (a_cur, 'p'); }
 
 
 
@@ -137,11 +137,12 @@ yscore__title           (tSCORE *a_cur, tSCORE_TABLE *a_table, char a_type)
 }
 
 char*
-ySCORE_title            (tSCORE *a_cur, char a_type)
+ySCORE_title            (void *a_cur, char a_type)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
+   tSCORE     *x_cur       = NULL;
    /*---(header)-------------------------*/
    DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
    /*---(check return)-------------------*/
@@ -150,9 +151,12 @@ ySCORE_title            (tSCORE *a_cur, char a_type)
       DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
       return "(no table)";
    }
+   /*---(type)---------------------------*/
+   x_cur = (tSCORE*) a_cur;
+   DEBUG_YSCORE   yLOG_point   ("x_cur"     , x_cur);
    /*---(complete)-----------------------*/
    DEBUG_YSCORE   yLOG_exit    (__FUNCTION__);
-   yscore__title (a_cur, a_cur->m_table , a_type);
+   yscore__title (x_cur, x_cur->m_table , a_type);
    /*---(complete)-----------------------*/
    return g_print;
 }
@@ -209,11 +213,12 @@ yscore__header          (tSCORE_TABLE *a_table, char n)
 }
 
 char*
-ySCORE_header           (tSCORE *a_cur, char n) 
+ySCORE_header           (void *a_cur, char n) 
 { 
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
+   tSCORE     *x_cur       = NULL;
    /*---(header)-------------------------*/
    DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
    /*---(check return)-------------------*/
@@ -222,7 +227,11 @@ ySCORE_header           (tSCORE *a_cur, char n)
       DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
       return "(no table)";
    }
-   yscore__header  (a_cur->m_table , n);
+   /*---(type)---------------------------*/
+   x_cur = (tSCORE*) a_cur;
+   DEBUG_YSCORE   yLOG_point   ("x_cur"     , x_cur);
+   /*---(call header)--------------------*/
+   yscore__header  (x_cur->m_table , n);
    /*---(complete)-----------------------*/
    DEBUG_YSCORE    yLOG_exit    (__FUNCTION__);
    return g_print;
@@ -399,11 +408,12 @@ yscore__legend          (tSCORE_TABLE *a_table, char a_line, char a_label [LEN_T
 }
 
 char*
-ySCORE_legend           (tSCORE *a_cur, char a_line, char a_label [LEN_TERSE])
+ySCORE_legend           (void *a_cur, char a_line, char a_label [LEN_TERSE])
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
+   tSCORE     *x_cur       = NULL;
    /*---(header)-------------------------*/
    DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
    /*---(check return)-------------------*/
@@ -412,7 +422,11 @@ ySCORE_legend           (tSCORE *a_cur, char a_line, char a_label [LEN_TERSE])
       DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
       return "(no table)";
    }
-   yscore__legend (a_cur->m_table, a_line, a_label, a_cur->o_terse);
+   /*---(type)---------------------------*/
+   x_cur = (tSCORE*) a_cur;
+   DEBUG_YSCORE   yLOG_point   ("x_cur"     , x_cur);
+   /*---(call legend)--------------------*/
+   yscore__legend (x_cur->m_table, a_line, a_label, x_cur->o_terse);
    /*---(complete)-----------------------*/
    DEBUG_YSCORE    yLOG_exit    (__FUNCTION__);
    return g_print;

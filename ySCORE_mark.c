@@ -183,11 +183,12 @@ yscore_mark             (tSCORE *a_cur, tSCORE_TABLE *a_table, char c_validity, 
 }
 
 char
-ySCORE_mark             (tSCORE *a_cur, char a_label [LEN_TERSE], uchar a_mark)
+ySCORE_mark             (void *a_cur, char a_label [LEN_TERSE], uchar a_mark)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
+   tSCORE     *x_cur       = NULL;
    /*---(header)-------------------------*/
    DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
    /*---(check return)-------------------*/
@@ -196,7 +197,11 @@ ySCORE_mark             (tSCORE *a_cur, char a_label [LEN_TERSE], uchar a_mark)
       DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
-   rc = yscore_mark   (a_cur, a_cur->m_table, a_cur->m_validity, a_label, a_mark, a_cur->o_terse, a_cur->o_score, a_cur->o_report, a_cur->o_poly);
+   /*---(type)---------------------------*/
+   x_cur = (tSCORE*) a_cur;
+   DEBUG_YSCORE   yLOG_point   ("x_cur"     , x_cur);
+   /*---(call mark)----------------------*/
+   rc = yscore_mark   (x_cur, x_cur->m_table, x_cur->m_validity, a_label, a_mark, x_cur->o_terse, x_cur->o_score, x_cur->o_report, x_cur->o_poly);
    DEBUG_YSCORE   yLOG_value   ("mark"      , rc);
    --rce;  if (rc < 0) {
       DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
@@ -245,12 +250,13 @@ yscore_value            (tSCORE_TABLE *a_table, char a_label [LEN_TERSE], char a
    return x_value;
 }
 
-char
-ySCORE_value            (tSCORE *a_cur, char a_label [LEN_TERSE])
+uchar
+ySCORE_value            (void *a_cur, char a_label [LEN_TERSE])
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
+   tSCORE     *x_cur       = NULL;
    short       x_mark      =    0;
    /*---(header)-------------------------*/
    DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
@@ -260,7 +266,11 @@ ySCORE_value            (tSCORE *a_cur, char a_label [LEN_TERSE])
       DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
       return '¤';
    }
-   x_mark = yscore_value (a_cur->m_table , a_label, a_cur->o_score);
+   /*---(type)---------------------------*/
+   x_cur = (tSCORE*) a_cur;
+   DEBUG_YSCORE   yLOG_point   ("x_cur"     , x_cur);
+   /*---(call value)---------------------*/
+   x_mark = yscore_value (x_cur->m_table , a_label, x_cur->o_score);
    DEBUG_YSCORE   yLOG_char    ("mark"      , x_mark);
    /*---(complete)-----------------------*/
    DEBUG_YSCORE   yLOG_exit    (__FUNCTION__);
@@ -308,11 +318,12 @@ yscore_mask             (tSCORE_TABLE *a_table, char a_beg [LEN_TERSE], char a_e
 }
 
 char
-ySCORE_mask             (tSCORE *a_cur, char a_beg [LEN_TERSE], char a_end [LEN_TERSE])
+ySCORE_mask             (void *a_cur, char a_beg [LEN_TERSE], char a_end [LEN_TERSE])
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
+   tSCORE     *x_cur       = NULL;
    /*---(header)-------------------------*/
    DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
    /*---(check return)-------------------*/
@@ -321,7 +332,11 @@ ySCORE_mask             (tSCORE *a_cur, char a_beg [LEN_TERSE], char a_end [LEN_
       DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
-   rc = yscore_mask (a_cur->m_table, a_beg, a_end, a_cur->o_terse, a_cur->o_score, a_cur->o_report, a_cur->o_poly);
+   /*---(type)---------------------------*/
+   x_cur = (tSCORE*) a_cur;
+   DEBUG_YSCORE   yLOG_point   ("x_cur"     , x_cur);
+   /*---(call mask)----------------------*/
+   rc = yscore_mask (x_cur->m_table, a_beg, a_end, x_cur->o_terse, x_cur->o_score, x_cur->o_report, x_cur->o_poly);
    DEBUG_YSCORE   yLOG_value   ("mask"      , rc);
    --rce;  if (rc < 0) {
       DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);

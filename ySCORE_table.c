@@ -5,12 +5,12 @@
 
 
 char
-ySCORE_init             (tSCORE_TABLE *a_table, char a_validity, tSCORE **b_new)
+ySCORE_init             (tSCORE_TABLE *a_table, char a_validity, void **b_new)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
-   void       *x_new       = NULL;
+   tSCORE     *x_new       = NULL;
    int         x_tries     =    0;
    /*---(header)-------------------------*/
    DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
@@ -42,29 +42,30 @@ ySCORE_init             (tSCORE_TABLE *a_table, char a_validity, tSCORE **b_new)
       DEBUG_YSCORE   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
-   /*---(save pointer)-------------------*/
-   *b_new = x_new;
-   DEBUG_YSCORE   yLOG_point   ("*b_new"    , *b_new);
    /*---(set key values)-----------------*/
-   (*b_new)->m_table    = a_table;
-   (*b_new)->m_validity = a_validity;
+   x_new->m_table    = a_table;
+   x_new->m_validity = a_validity;
    /*---(wipe)---------------------------*/
-   rc = ySCORE_clear (*b_new);
+   rc = ySCORE_clear (x_new);
    DEBUG_YSCORE   yLOG_value   ("clear"     , rc);
    --rce;  if (rc < 0) {
       DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
+   /*---(save pointer)-------------------*/
+   *b_new = x_new;
+   DEBUG_YSCORE   yLOG_point   ("*b_new"    , *b_new);
    /*---(complete)-----------------------*/
    DEBUG_YSCORE   yLOG_exit    (__FUNCTION__);
    return 1;
 }
 
 char
-ySCORE_wrap             (tSCORE **b_old)
+ySCORE_wrap             (void **b_old)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
+   tSCORE     *x_old       = NULL;
    /*---(header)-------------------------*/
    DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
    /*---(check return)-------------------*/
@@ -79,7 +80,8 @@ ySCORE_wrap             (tSCORE **b_old)
       return rce;
    }
    /*---(clear and return)---------------*/
-   free (*b_old);
+   x_old = *b_old;
+   free (x_old);
    *b_old = NULL;
    DEBUG_YSCORE   yLOG_point   ("*b_old"    , *b_old);
    /*---(complete)-----------------------*/
@@ -179,11 +181,12 @@ yscore_clear            (tSCORE_TABLE *a_table, short *r_max, char r_terse [LEN_
 }
 
 char
-ySCORE_clear            (tSCORE *a_cur)
+ySCORE_clear            (void *a_cur)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
+   tSCORE     *x_cur       = NULL;
    /*---(header)-------------------------*/
    DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
    /*---(check return)-------------------*/
@@ -192,8 +195,11 @@ ySCORE_clear            (tSCORE *a_cur)
       DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
+   /*---(type)---------------------------*/
+   x_cur = (tSCORE*) a_cur;
+   DEBUG_YSCORE   yLOG_point   ("x_cur"     , x_cur);
    /*---(call clear)---------------------*/
-   rc = yscore_clear (a_cur->m_table, &(a_cur->m_max), a_cur->o_terse, a_cur->o_score, a_cur->o_full, a_cur->o_report, a_cur->o_poly);
+   rc = yscore_clear (x_cur->m_table, &(x_cur->m_max), x_cur->o_terse, x_cur->o_score, x_cur->o_full, x_cur->o_report, x_cur->o_poly);
    DEBUG_YSCORE   yLOG_value   ("clear"     , rc);
    --rce;  if (rc < 0) {
       DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);

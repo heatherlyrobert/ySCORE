@@ -1,0 +1,142 @@
+.TH ySCORE· 3 2025-jun "linux" "heatherly custom tools manual"
+
+.SH NAME
+ySCORE \- provides summary scorecard for complex applications
+
+.SH PATRON
+.B theia-euryphaessa
+(wide-shinning) light of the clear blue sky
+
+.SH IMAGERY
+glittering woman, mother of helios (sun), selene (moon), and eos (dawn)
+
+.SH SUMMARY
+ySCORE is a libary to enable operational debugging on a transaction basis by
+enumerating a list of checks and data that are then populated as the transation
+is processed.  it leads to good overview and quicker trouble shooting.
+
+.SH SERIOUS FOREWARNING
+i am a crazy, selfish, dog-fooding c-programmer.  my code tends to be
+experimental and constantly evolving.  my point is NOT to be the best, it is
+to challenge myself, build from scratch, and allow fast problem solving.
+
+.SH DOCUMENTATION
+.nf
+.B SCORE (3))´´´´´´´´´interfacing with yENV in general
+SCORE_table (3)    setting up and closing out the table
+SCORE_audit (3)    checking the table for trouble
+SCORE_mark (3)     making updates to values on scorecard
+SCORE_report (3)   obtaining the results
+SCORE (6))         data format
+
+.SH TABLE OF CONTENTS
+.nf  
+a) overview        quick summary
+b) synopsis        function overview
+c) table format    pre-defined sccoring table format
+d) setup           setting up and tearing down
+
+.SH A) OVERVIEW
+after building this easedropping/debugging method into a couple programs,
+i decided to standardize, improve, and share the implemenation.  its really
+quite simplistic (YMMV).
+
+the only complication for me was that some programs use multiple scorecards
+across levels of detail.  to fix this, the interface had to switch to sharing
+the <object> across function calls.  once i am happy, i may simplify.
+
+.SH B) SYNOPSIS
+.nf
+usage is noted on the far-left of each entry...
+   ! means once-per-program
+   ¼ primary interface
+   ´ every program
+   · not in every program
+
+---fullsome------------------------------------
+·  char     ySOCRE_version          (void);
+
+---setup/shutdown------------------------------
+´  char     ySCORE_init             (<table>, <validity>, &<handle>);
+´  char     ySCORE_clear            (<handle>);
+´  char     ySCORE_wrap             (&<handle>);
+
+---populating----------------------------------
+´  char     ySCORE_mark             (<handle>, <label>, <mark>);
+·  uchar    ySCORE_value            (<handle>, <label>);
+·  uchar    ySCORE_mask             (<handle>, <beg>, <end>);
+
+---populating----------------------------------
+·  char     ySCORE_pos              (<handle>, <label>, ´´´);
+
+---reporting-----------------------------------
+·  char*    ySCORE_terse            (<handle>);
+´  char*    ySCORE_score            (<handle>);
+·  char*    ySCORE_full             (<handle>);
+·  char*    ySCORE_report           (<handle>);
+·  char*    ySCORE_poly             (<handle>);
+
+---reporting-extras----------------------------
+·  char*    ySCORE_title            (<handle>, <type>);
+·  char*    ySCORE_header           (<handle>, <line>);
+·  char*    ySCORE_legend           (<handle>, <line>, <label>);
+
+.SH C) TABLE FORMAT
+the library defines the table structure to be built into the program.  it is
+simple, but i want to avoid trivial issues that come from re-defining it.
+
+.nf
+struct cSCORE_TABLE {
+   char        s_label     [LEN_TERSE];
+   char        s_default;
+   char        s_sample;  
+   char        s_print     [LEN_LABEL];  
+   char        s_desc      [LEN_DESC];
+   char        s_valid     [LEN_TITLE];
+   char        s_legend    [LEN_FULL];
+};
+
+.RS 3
+.B char* <label> is an unique, uppercase 0-12 character line identifier.
+.RE
+
+.RS 3
+.B char  <default> is the starting value for that position.
+.RE
+
+.RS 3
+.B char  <sample> is a realistic, most common value for that entry
+.RE
+
+.RS 3
+.B char  <print> is a 1-6 character title for report headers
+.RE
+
+.RS 3
+.B char  <desc> is a 1-50 character description of the entries purpose
+.RE
+
+.RS 3
+.B char  <valid> is a 0-30 character set of valid characters for this entry
+.RE
+
+.RS 3
+.B char  <legend> is a 0-200 character explanation of the valid characters
+.RE
+
+.SH D) SETUP
+once the table is created in the source code, it is simple to create and
+destroy.
+
+.SS char  ySCORE_init (<table>, <valiidate>, &<handle>)
+accepts the table name and returns a handle to the malloced object.
+
+.RS 3
+.B char <validate> 'y' means check marks against the valid field, any other
+value and it skips validity checks.
+.RE
+
+.SS char  ySCORE_wrap (&<handle>)
+frees the data and grounds the pointer.
+
+
