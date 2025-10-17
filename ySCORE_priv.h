@@ -38,8 +38,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "2.--, production"
 #define     P_VERMINOR  "2.1-, integrate into yJOBS and others"
-#define     P_VERNUM    "2.1c"
-#define     P_VERTXT    "hid score detail structure in private header, and changed table handle to void externally"
+#define     P_VERNUM    "2.1d"
+#define     P_VERTXT    "added specialty marking from polymnia and unit-tested"
 /*········· ··········· ´·····························´········································*/
 #define     P_PRIORITY  "direct, simple, brief, vigorous, and lucid (h.w. fowler)"
 #define     P_PRINCIPAL "[grow a set] and build your wings on the way down (r. bradbury)"
@@ -74,6 +74,14 @@ struct cSCORE {
    char           o_report     [LEN_FULL];
    char           o_poly       [LEN_FULL];
 };
+
+/*> struct cscore_stats {                                                             <* 
+ *>    int         s_value;                                                           <* 
+ *>    char        s_rating;                                                          <* 
+ *> };                                                                                <* 
+ *> typedef   struct   cscore_stats   tscore_stats;                                   <*/
+
+
 
 extern char  g_print      [LEN_RECD];
 

@@ -21,14 +21,6 @@ struct cSCORE_TABLE {
 };
 
 
-/*> struct cSCORE_STATS {                                                             <* 
- *>    int         s_value;                                                           <* 
- *>    char        s_rating;                                                          <* 
- *> };                                                                                <* 
- *> typedef   struct   cSCORE_STATS   tSCORE_STATS;                                   <*/
-
-
-
 
 /*===[[ yENV_audit.c ]]=======================================================*/
 /*········· ´······················ ´·········································*/
@@ -50,6 +42,12 @@ char*       ySCORE_version          (void);
 char        ySCORE_mark             (void *a_cur, char a_label [LEN_TERSE], uchar a_mark);
 uchar       ySCORE_value            (void *a_cur, char a_label [LEN_TERSE]);
 char        ySCORE_mask             (void *a_cur, char a_beg [LEN_TERSE], char a_end [LEN_TERSE]);
+/*---(special)--------------*/
+char        ySCORE_exists           (void *a_cur, char a_label [LEN_TERSE], int a_src);
+char        ySCORE_flag             (void *a_cur, char a_label [LEN_TERSE], int a_src);
+char        ySCORE_exact            (void *a_cur, char a_label [LEN_TERSE], int a_src);
+char        ySCORE_scaled           (void *a_cur, char a_label [LEN_TERSE], int a_src);
+char        ySCORE_percent          (void *a_cur, char a_label [LEN_TERSE], int a_part, int a_total);
 /*---(done)-----------------*/
 
 

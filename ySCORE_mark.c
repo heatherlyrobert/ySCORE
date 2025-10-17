@@ -347,4 +347,71 @@ ySCORE_mask             (void *a_cur, char a_beg [LEN_TERSE], char a_end [LEN_TE
    return 1;
 }
 
+char
+ySCORE_exists           (void *a_cur, char a_label [LEN_TERSE], int a_src)
+{
+   uchar       x_mark      =  '·';
+   if      (a_src <     -1)  x_mark = '¢';
+   else if (a_src ==    -1)  x_mark = '-';
+   else if (a_src ==     0)  x_mark = '-';
+   else                      x_mark = '#';
+   return ySCORE_mark (a_cur, a_label, x_mark);
+}
+
+char
+ySCORE_flag             (void *a_cur, char a_label [LEN_TERSE], int a_src)
+{
+   uchar       x_mark      =  '·';
+   if      (a_src <     -1)  x_mark = '¢';
+   else if (a_src ==    -1)  x_mark = '-';
+   else if (a_src ==     0)  x_mark = '-';
+   else                      x_mark = 'y';
+   return ySCORE_mark (a_cur, a_label, x_mark);
+}
+
+char
+ySCORE_exact            (void *a_cur, char a_label [LEN_TERSE], int a_src)
+{
+   int         c           =    0;
+   char       *x_scale     = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+   int         x_max       = (strlen (x_scale));
+   uchar       x_mark      =  '·';
+   if      (a_src <     -1)  x_mark = '¢';
+   else if (a_src ==    -1)  x_mark = '·';
+   else if (a_src ==     0)  x_mark = '0';
+   else if (a_src >= x_max)  x_mark = '#';
+   else                      x_mark = x_scale [a_src];
+   return ySCORE_mark (a_cur, a_label, x_mark);
+}
+
+char
+ySCORE_scaled           (void *a_cur, char a_label [LEN_TERSE], int a_src)
+{
+   int         c           =    0;
+   char       *x_scale     = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+   int         x_max       = strlen (x_scale) * 5;
+   uchar       x_mark      =  '·';
+   if      (a_src <     -1)  x_mark = '¢';
+   else if (a_src ==    -1)  x_mark = '·';
+   else if (a_src ==     0)  x_mark = '0';
+   else if (a_src >= x_max)  x_mark = '#';
+   else                      x_mark = x_scale [a_src /  5];
+   return ySCORE_mark (a_cur, a_label, x_mark);
+}
+
+char
+ySCORE_percent          (void *a_cur, char a_label [LEN_TERSE], int a_part, int a_total)
+{
+   float       a           =  0.0;
+   int         b           =    0;
+   if (a_total != 0) {
+      a = ((float) a_part / a_total);
+      b = round (a * 10);
+   }
+   if (b > 9) {
+      return ySCORE_mark  (a_cur, a_label, '*');
+   }
+   if (b < 0)  b = -2;
+   return ySCORE_exact (a_cur, a_label, b);
+}
 
