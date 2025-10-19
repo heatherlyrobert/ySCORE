@@ -269,7 +269,7 @@ yscore__audit_line      (short n, char a_label [LEN_TERSE], char a_default, char
 }
 
 char
-yscore__audit_dup       (tSCORE_TABLE *a_table, char n, char a_label [LEN_TERSE])
+yscore__audit_dup       (tySCORE_TB *a_table, char n, char a_label [LEN_TERSE])
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -299,7 +299,7 @@ yscore__audit_dup       (tSCORE_TABLE *a_table, char n, char a_label [LEN_TERSE]
 }
 
 char
-yscore__audit           (tSCORE_TABLE *a_table, char c_loud)
+yscore__audit           (tySCORE_TB *a_table, char c_loud)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -390,7 +390,7 @@ ySCORE_audit            (void *a_cur)
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
-   tSCORE     *x_cur       = NULL;
+   tySCORE    *x_cur       = NULL;
    /*---(header)-------------------------*/
    DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
    /*---(defense)------------------------*/
@@ -400,7 +400,7 @@ ySCORE_audit            (void *a_cur)
       return rce;
    }
    /*---(type)---------------------------*/
-   x_cur = (tSCORE*) a_cur;
+   x_cur = (tySCORE*) a_cur;
    DEBUG_YSCORE   yLOG_point   ("x_cur"     , x_cur);
    /*---(call audit)---------------------*/
    rc = yscore__audit (x_cur->m_table, 'y');

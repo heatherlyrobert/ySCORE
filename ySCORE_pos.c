@@ -46,7 +46,7 @@ yscore_pos__next        (short n, char a_sample, short *b_tpos, short *b_spos, s
 }
 
 char
-yscore_pos_next         (tSCORE_TABLE *a_table, char a_type, short n, short *r_pos)
+yscore_pos_next         (tySCORE_TB *a_table, char a_type, short n, short *r_pos)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -65,7 +65,7 @@ yscore_pos_next         (tSCORE_TABLE *a_table, char a_type, short n, short *r_p
 }
 
 char
-yscore_pos              (tSCORE_TABLE *a_table, short a_max, char a_label [LEN_TERSE], short *r_index, short *r_tpos, short *r_spos, short *r_rpos, short *r_ppos)
+yscore_pos              (tySCORE_TB *a_table, short a_max, char a_label [LEN_TERSE], short *r_index, short *r_tpos, short *r_spos, short *r_rpos, short *r_ppos)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -162,7 +162,7 @@ ySCORE_pos              (void *a_cur, char a_label [LEN_TERSE], short *r_index, 
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
-   tSCORE     *x_cur       = NULL;
+   tySCORE    *x_cur       = NULL;
    /*---(header)-------------------------*/
    DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
    /*---(check return)-------------------*/
@@ -172,7 +172,7 @@ ySCORE_pos              (void *a_cur, char a_label [LEN_TERSE], short *r_index, 
       return rce;
    }
    /*---(type)---------------------------*/
-   x_cur = (tSCORE*) a_cur;
+   x_cur = (tySCORE*) a_cur;
    DEBUG_YSCORE   yLOG_point   ("x_cur"     , x_cur);
    /*---(call pos)-----------------------*/
    rc = yscore_pos (x_cur->m_table, x_cur->m_max, a_label, r_index, r_tpos, r_spos, r_rpos, r_ppos);
