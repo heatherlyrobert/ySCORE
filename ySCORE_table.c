@@ -61,6 +61,51 @@ ySCORE_init             (tySCORE_TB *a_table, char a_validity, void **b_new)
 }
 
 char
+yscore_structs          (void *v_hand, tySCORE **r_hand, tySCORE_TB **r_table, short *r_max)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   tySCORE    *x_hand      = NULL;
+   tySCORE_TB *x_table     = NULL;
+   short       x_max       =    0;
+   /*---(header)-------------------------*/
+   DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
+   /*---(default)------------------------*/
+   if (r_hand    != NULL)  *r_hand  = NULL;
+   if (r_table   != NULL)  *r_table = NULL;
+   if (r_max     != NULL)  *r_max   =    0;
+   /*---(defense)------------------------*/
+   DEBUG_YSCORE   yLOG_point   ("v_hand"    , v_hand);
+   --rce;  if (v_hand == NULL) {
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   DEBUG_YSCORE   yLOG_point   ("r_hand"    , r_hand);
+   DEBUG_YSCORE   yLOG_point   ("r_table"   , r_table);
+   /*---(type)---------------------------*/
+   x_hand = (tySCORE*) v_hand;
+   DEBUG_YSCORE   yLOG_point   ("x_hand"    , x_hand);
+   /*---(table)--------------------------*/
+   x_table = x_hand->m_table;
+   DEBUG_YSCORE   yLOG_point   ("x_table"   , x_table);
+   --rce;  if (x_table == NULL) {
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(max)----------------------------*/
+   x_max = x_hand->m_max;
+   DEBUG_YSCORE   yLOG_value   ("x_max"     , x_max);
+   /*---(default)------------------------*/
+   if (r_hand    != NULL)  *r_hand  = x_hand;
+   if (r_table   != NULL)  *r_table = x_table;
+   if (r_max     != NULL)  *r_max   = x_max;
+   /*---(complete)-----------------------*/
+   DEBUG_YSCORE   yLOG_exit    (__FUNCTION__);
+   return 1;
+}
+
+char
 ySCORE_wrap             (void **b_old)
 {
    /*---(locals)-----------+-----+-----+-*/
@@ -103,7 +148,7 @@ yscore_clear            (tySCORE_TB *a_table, short *r_max, char r_terse [LEN_FU
    char        x_terse     [LEN_FULL]  = "";
    char        x_score     [LEN_FULL]  = "";
    char        x_full      [LEN_FULL]  = "";
-   char        x_report    [LEN_FULL]  = "";
+   char        x_report    [LEN_PATH]  = "";
    char        x_poly      [LEN_FULL]  = "";
    char        x_lead      =  'y';
    /*---(header)-------------------------*/
@@ -164,7 +209,7 @@ yscore_clear            (tySCORE_TB *a_table, short *r_max, char r_terse [LEN_FU
       strlcat (x_full  , f  , LEN_FULL);
       strlcat (x_score , s  , LEN_FULL);
       strlcat (x_terse , t  , LEN_FULL);
-      strlcat (x_report, r  , LEN_FULL);
+      strlcat (x_report, r  , LEN_PATH);
       strlcat (x_poly  , p  , LEN_FULL);
    }
    /*---(finish)-------------------------*/
@@ -182,25 +227,23 @@ yscore_clear            (tySCORE_TB *a_table, short *r_max, char r_terse [LEN_FU
 }
 
 char
-ySCORE_clear            (void *a_cur)
+ySCORE_clear            (void *v_hand)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
-   tySCORE    *x_cur       = NULL;
+   tySCORE    *x_hand      = NULL;
    /*---(header)-------------------------*/
    DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
-   /*---(check return)-------------------*/
-   DEBUG_YSCORE   yLOG_point   ("a_cur"     , a_cur);
-   --rce;  if (a_cur == NULL) {
+   /*---(return)-------------------------*/
+   rc = yscore_structs (v_hand, &x_hand, NULL, NULL);
+   DEBUG_YSCORE   yLOG_value   ("structs"   , rc);
+   --rce;  if (rc < 0) {
       DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
-   /*---(type)---------------------------*/
-   x_cur = (tySCORE*) a_cur;
-   DEBUG_YSCORE   yLOG_point   ("x_cur"     , x_cur);
    /*---(call clear)---------------------*/
-   rc = yscore_clear (x_cur->m_table, &(x_cur->m_max), x_cur->o_terse, x_cur->o_score, x_cur->o_full, x_cur->o_report, x_cur->o_poly);
+   rc = yscore_clear (x_hand->m_table, &(x_hand->m_max), x_hand->o_terse, x_hand->o_score, x_hand->o_full, x_hand->o_report, x_hand->o_poly);
    DEBUG_YSCORE   yLOG_value   ("clear"     , rc);
    --rce;  if (rc < 0) {
       DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
@@ -212,7 +255,7 @@ ySCORE_clear            (void *a_cur)
 }
 
 char
-yscore_data      (tySCORE *a_cur, short n, char r_label [LEN_TERSE], char *r_default, char *r_sample, char r_print [LEN_TERSE], char r_desc [LEN_DESC], char r_valid [LEN_TITLE], char r_legend [LEN_FULL])
+yscore_data      (tySCORE *a_hand, short n, char r_label [LEN_TERSE], char *r_default, char *r_sample, char r_print [LEN_TERSE], char r_desc [LEN_DESC], char r_valid [LEN_TITLE], char r_legend [LEN_FULL])
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -227,8 +270,8 @@ yscore_data      (tySCORE *a_cur, short n, char r_label [LEN_TERSE], char *r_def
    if (r_valid   != NULL)   strcpy (r_valid   , "");
    if (r_legend  != NULL)   strcpy (r_legend  , "");
    /*---(check return)-------------------*/
-   DEBUG_YSCORE   yLOG_point   ("a_cur"     , a_cur);
-   --rce;  if (a_cur == NULL) {
+   DEBUG_YSCORE   yLOG_point   ("a_hand"    , a_hand);
+   --rce;  if (a_hand == NULL) {
       DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
@@ -238,22 +281,155 @@ yscore_data      (tySCORE *a_cur, short n, char r_label [LEN_TERSE], char *r_def
       DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_YSCORE   yLOG_value   ("m_max"     , a_cur->m_max);
-   --rce;  if (n > a_cur->m_max) {
+   DEBUG_YSCORE   yLOG_value   ("m_max"     , a_hand->m_max);
+   --rce;  if (n > a_hand->m_max) {
       DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    /*---(save-back)----------------------*/
-   if (r_label   != NULL)   strlcpy (r_label   , (a_cur->m_table) [n].s_label   , LEN_TERSE);
-   if (r_default != NULL)   *r_default = (a_cur->m_table) [n].s_default;
-   if (r_sample  != NULL)   *r_sample  = (a_cur->m_table) [n].s_sample;
-   if (r_print   != NULL)   strlcpy (r_print   , (a_cur->m_table) [n].s_print   , LEN_TERSE);
-   if (r_desc    != NULL)   strlcpy (r_desc    , (a_cur->m_table) [n].s_desc    , LEN_DESC);
-   if (r_valid   != NULL)   strlcpy (r_valid   , (a_cur->m_table) [n].s_valid   , LEN_TITLE);
-   if (r_legend  != NULL)   strlcpy (r_legend  , (a_cur->m_table) [n].s_legend  , LEN_FULL);
+   if (r_label   != NULL)   strlcpy (r_label   , (a_hand->m_table) [n].s_label   , LEN_TERSE);
+   if (r_default != NULL)   *r_default = (a_hand->m_table) [n].s_default;
+   if (r_sample  != NULL)   *r_sample  = (a_hand->m_table) [n].s_sample;
+   if (r_print   != NULL)   strlcpy (r_print   , (a_hand->m_table) [n].s_print   , LEN_TERSE);
+   if (r_desc    != NULL)   strlcpy (r_desc    , (a_hand->m_table) [n].s_desc    , LEN_DESC);
+   if (r_valid   != NULL)   strlcpy (r_valid   , (a_hand->m_table) [n].s_valid   , LEN_TITLE);
+   if (r_legend  != NULL)   strlcpy (r_legend  , (a_hand->m_table) [n].s_legend  , LEN_FULL);
    /*---(complete)-----------------------*/
    DEBUG_YSCORE   yLOG_exit    (__FUNCTION__);
    return 1;
+}
+
+short
+ySCORE_count            (void *v_hand)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   short       x_max       =    0;
+   /*---(header)-------------------------*/
+   DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
+   /*---(return)-------------------------*/
+   rc = yscore_structs (v_hand, NULL, NULL, &x_max);
+   DEBUG_YSCORE   yLOG_value   ("structs"   , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   DEBUG_YSCORE   yLOG_value   ("x_max"     , x_max);
+   /*---(complete)-----------------------*/
+   DEBUG_YSCORE   yLOG_exit    (__FUNCTION__);
+   return x_max;
+}
+
+short
+yscore_finding          (void *v_hand, short a_index, char a_dir, char r_label [LEN_TERSE], char *r_default, char *r_sample, char r_print [LEN_LABEL], char r_desc [LEN_DESC], char *r_style, char *r_check, char r_valid [LEN_TITLE], char r_legend [LEN_FULL])
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   tySCORE    *x_hand      = NULL;
+   tySCORE_TB *x_table     = NULL;
+   short       x_max       =    0;
+   char       *x_moves     = "[(<.>)]";
+   static short  x_curr    =    0;
+   short       x_save      =   -1;
+   int         i           =    0;
+   /*---(header)-------------------------*/
+   DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
+   /*---(default)------------------------*/
+   if (r_label   != NULL)  strcpy (r_label , "");
+   if (r_default != NULL)  *r_default = '·';
+   if (r_sample  != NULL)  *r_sample  = '·';
+   if (r_print   != NULL)  strcpy (r_print , "");
+   if (r_desc    != NULL)  strcpy (r_desc  , "");
+   if (r_style   != NULL)  *r_style   = '·';
+   if (r_check   != NULL)  *r_check   = '·';
+   if (r_valid   != NULL)  strcpy (r_valid , "");
+   if (r_legend  != NULL)  strcpy (r_legend, "");
+   /*---(defense)------------------------*/
+   rc = yscore_structs (v_hand, &x_hand, &x_table, &x_max);
+   DEBUG_YSCORE   yLOG_value   ("structs"   , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   DEBUG_YSCORE   yLOG_value   ("a_index"   , a_index);
+   --rce;  if (a_index >= x_max) {
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   DEBUG_YSCORE   yLOG_char    ("a_dir"     , a_dir);
+   DEBUG_YSCORE   yLOG_info    ("x_moves"   , x_moves);
+   --rce;  if (a_index < 0 && a_dir == 0 || strchr (x_moves, a_dir) == NULL) {
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(by_index)-----------------------*/
+   if (a_index >= 0) {
+      DEBUG_YSCORE   yLOG_note    ("set by index");
+      x_curr = a_index;
+   }
+   /*---(by_cursor)----------------------*/
+   else {
+      x_save = x_curr;
+      switch (a_dir) {
+      case '[' : x_curr = 0;
+                 break;
+      case '(' : for (i = x_curr - 1; i >= 0; --i) { if (x_table [x_curr].s_sample == 3)  x_curr = i; }
+                    if (x_save = x_curr) {
+                       DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+                       return rce;
+                    }
+                 break;
+      case '<' : if (x_curr == 0) {
+                    DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+                    return rce;
+                 }
+                 --x_curr;
+                 break;
+      case '.' : break;
+      case '>' : if (x_curr >= x_max) {
+                    DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+                    return rce;
+                 }
+                 ++x_curr;
+                 break;
+      case ')' :
+                 for (i = x_curr + 1; i < x_max; ++i) { if (x_table [x_curr].s_sample == 3)  x_curr = i; }
+                 if (x_save = x_curr) {
+                    DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+                    return rce;
+                 }
+                 break;
+      case ']' : x_curr = x_max - 1;
+                 break;
+      }
+   }
+   /*---(save-back)----------------------*/
+   if (r_label   != NULL)  strlcpy (r_label , x_table [x_curr].s_label , LEN_TERSE);
+   if (r_default != NULL)  *r_default = x_table [x_curr].s_default;
+   if (r_sample  != NULL)  *r_sample  = x_table [x_curr].s_sample;
+   if (r_print   != NULL)  strlcpy (r_print , x_table [x_curr].s_print , LEN_LABEL);
+   if (r_desc    != NULL)  strlcpy (r_desc  , x_table [x_curr].s_desc  , LEN_DESC);
+   if (r_style   != NULL)  *r_style   = x_table [x_curr].s_style;
+   if (r_check   != NULL)  *r_check   = x_table [x_curr].s_check;
+   if (r_valid   != NULL)  strlcpy (r_valid , x_table [x_curr].s_valid , LEN_TITLE);
+   if (r_legend  != NULL)  strlcpy (r_legend, x_table [x_curr].s_legend, LEN_FULL);
+   /*---(complete)-----------------------*/
+   DEBUG_YSCORE   yLOG_exit    (__FUNCTION__);
+   return x_curr;
+}
+
+short
+ySCORE_by_index         (void *v_hand, short a_index, char r_label [LEN_TERSE], char *r_default, char *r_sample, char r_print [LEN_LABEL], char r_desc [LEN_DESC], char *r_style, char *r_check, char r_valid [LEN_TITLE], char r_legend [LEN_FULL])
+{
+   return yscore_finding  (v_hand, a_index, 0, r_label, r_default, r_sample, r_print, r_desc, r_style, r_check, r_valid, r_legend);
+}
+
+short
+ySCORE_by_cursor        (void *v_hand, char a_dir, char r_label [LEN_TERSE], char *r_default, char *r_sample, char r_print [LEN_LABEL], char r_desc [LEN_DESC], char *r_style, char *r_check, char r_valid [LEN_TITLE], char r_legend [LEN_FULL])
+{
+   return yscore_finding  (v_hand, -1, a_dir, r_label, r_default, r_sample, r_print, r_desc, r_style, r_check, r_valid, r_legend);
 }
 
 

@@ -38,8 +38,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "2.--, production"
 #define     P_VERMINOR  "2.1-, integrate into yJOBS and others"
-#define     P_VERNUM    "2.1e"
-#define     P_VERTXT    "updated o_report length for new polymnia specification"
+#define     P_VERNUM    "2.1f"
+#define     P_VERTXT    "cleaned, simplified, and gussied-up ySCORE_legend (unit tested)"
 /*········· ··········· ´·····························´········································*/
 #define     P_PRIORITY  "direct, simple, brief, vigorous, and lucid (h.w. fowler)"
 #define     P_PRINCIPAL "[grow a set] and build your wings on the way down (r. bradbury)"
@@ -60,6 +60,8 @@
 #include    <yLOG.h>
 #include    <yURG.h>
 #include    <ySTR.h>
+
+#include    <yDLST_solo.h>
 
 
 
@@ -114,7 +116,7 @@ char        yscore__audit           (tySCORE_TB *a_table, char c_loud);
 /*---(valid)----------------*/
 char        yscore_valid            (char a_valid [LEN_LABEL], char r_valid [LEN_HUND]);
 /*---(mark)-----------------*/
-char        yscore_mark             (tySCORE *a_cur, tySCORE_TB *a_table, char c_validity, char a_label [LEN_TERSE], uchar a_mark, char b_terse [LEN_FULL], char b_score [LEN_FULL], char b_report [LEN_PATH], char b_poly [LEN_FULL]);
+char        yscore_mark             (tySCORE *a_hand, tySCORE_TB *a_table, char c_validity, char a_label [LEN_TERSE], uchar a_mark, char b_terse [LEN_FULL], char b_score [LEN_FULL], char b_report [LEN_PATH], char b_poly [LEN_FULL]);
 uchar       yscore_value            (tySCORE_TB *a_table, char a_label [LEN_TERSE], char a_score [LEN_FULL]);
 /*---(mask)-----------------*/
 char        yscore_mask             (tySCORE_TB *a_table, char a_beg [LEN_TERSE], char a_end [LEN_TERSE], char b_terse [LEN_FULL], char b_score [LEN_FULL], char b_report [LEN_PATH], char b_poly [LEN_FULL]);
@@ -135,9 +137,13 @@ char        yscore_pos              (tySCORE_TB *a_table, short a_max, char a_la
 
 /*===[[ yENV_rptg.c ]]========================================================*/
 /*········· ´······················ ´·········································*/
-char*       yscore_output           (tySCORE *a_cur, char a_which);
-char*       yscore__title           (tySCORE *a_cur, tySCORE_TB *a_table, char a_type);
+char*       yscore_output           (tySCORE *a_hand, char a_which);
+char*       yscore__title           (tySCORE *a_hand, tySCORE_TB *a_table, char a_type);
 char*       yscore__header          (tySCORE_TB *a_table, char n);
+char        yscore__legend_bounds   (tySCORE_TB *a_table, char a_label [LEN_TERSE], short *r_head, short *r_beg, short *r_end, short *r_cnt, short *r_npre);
+char*       yscore__legend_lead     (tySCORE_TB *a_table, short a_beg, short a_cur, short a_end, short a_npre, char r_fill [LEN_SHORT], char r_cap [LEN_SHORT]);
+char*       yscore__legend_detail   (tySCORE_TB *a_table, short a_cur, char a_fill [LEN_SHORT], char a_cap [LEN_SHORT]);
+char*       yscore__legend_full     (tySCORE_TB *a_table, char a_section [LEN_TERSE], char a_dir);
 char*       yscore__legend          (tySCORE_TB *a_table, char a_line, char a_label [LEN_TERSE], char a_terse [LEN_FULL]);
 /*---(done)-----------------*/
 
@@ -145,8 +151,9 @@ char*       yscore__legend          (tySCORE_TB *a_table, char a_line, char a_la
 
 /*===[[ yENV_table.c ]]=======================================================*/
 /*········· ´······················ ´·········································*/
+char        yscore_structs          (void *a_hand, tySCORE **r_hand, tySCORE_TB **r_table, short *r_max);
 char        yscore_clear            (tySCORE_TB *a_table, short *r_max, char r_terse [LEN_FULL], char r_score [LEN_FULL], char r_full [LEN_FULL], char r_report [LEN_PATH], char r_poly [LEN_FULL]);
-char        yscore_data             (tySCORE *a_cur, short n, char r_label [LEN_TERSE], char *r_default, char *r_sample, char r_print [LEN_TERSE], char r_desc [LEN_DESC], char r_valid [LEN_TITLE], char r_legend [LEN_FULL]);
+char        yscore_data             (tySCORE *a_hand, short n, char r_label [LEN_TERSE], char *r_default, char *r_sample, char r_print [LEN_TERSE], char r_desc [LEN_DESC], char r_valid [LEN_TITLE], char r_legend [LEN_FULL]);
 /*---(done)-----------------*/
 
 

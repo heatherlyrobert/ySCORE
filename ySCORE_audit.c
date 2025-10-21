@@ -385,25 +385,23 @@ yscore__audit           (tySCORE_TB *a_table, char c_loud)
 }
 
 char
-ySCORE_audit            (void *a_cur)
+ySCORE_audit            (void *v_hand)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
-   tySCORE    *x_cur       = NULL;
+   tySCORE_TB *x_table     = NULL;
    /*---(header)-------------------------*/
    DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
-   /*---(defense)------------------------*/
-   DEBUG_YSCORE   yLOG_point   ("a_cur"     , a_cur);
-   --rce;  if (a_cur == NULL) {
+   /*---(return)-------------------------*/
+   rc = yscore_structs (v_hand, NULL, &x_table, NULL);
+   DEBUG_YSCORE   yLOG_value   ("structs"   , rc);
+   --rce;  if (rc < 0) {
       DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
-   /*---(type)---------------------------*/
-   x_cur = (tySCORE*) a_cur;
-   DEBUG_YSCORE   yLOG_point   ("x_cur"     , x_cur);
    /*---(call audit)---------------------*/
-   rc = yscore__audit (x_cur->m_table, 'y');
+   rc = yscore__audit (x_table, 'y');
    DEBUG_YSCORE   yLOG_value   ("audit"     , rc);
    --rce;  if (rc < 0) {
       DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
