@@ -4,6 +4,37 @@
 
 
 
+/*===[[ GNU GENERAL PUBLIC LICENSE (GPL) ]]===================================*/
+/*´´·········1·········2·········3·········4·········5·········6·········7·········8  */
+
+#define  P_COPYRIGHT   \
+   "copyright (c) 2025 robert.s.heatherly at balsashrike at gmail dot com"
+
+#define  P_LICENSE     \
+   "the only place you could have gotten this code is my github, my website,¦"   \
+   "or illegal sharing. given that, you should be aware that this is GPL licensed."
+
+#define  P_COPYLEFT    \
+   "the GPL COPYLEFT REQUIREMENT means any modifications or derivative works¦"   \
+   "must be released under the same GPL license, i.e, must be free and open."
+
+#define  P_INCLUDE     \
+   "the GPL DOCUMENTATION REQUIREMENT means that you must include the original¦" \
+   "copyright notice and the full licence text with any resulting anything."
+
+#define  P_AS_IS       \
+   "the GPL NO WARRANTY CLAUSE means the software is provided without any¦"      \
+   "warranty and the author cannot be held liable for damages."
+
+#define  P_THEFT    \
+   "if you knowingly violate the spirit of these ideas, i suspect you might¦"    \
+   "find any number of freedom-minded hackers may take it quite personally ;)"
+
+/*´´·········1·········2·········3·········4·········5·········6·········7·········8  */
+/*===[[ GNU GENERAL PUBLIC LICENSE (GPL) ]]===================================*/
+
+
+
 uchar   gySCORE_stats [LEN_FULL];
 
 
@@ -88,6 +119,40 @@ char         /*--> decrease value by one -------------------------------------*/
 ySCORE_stats_dec        (void *v_hand, char a_label [LEN_TERSE])
 {
    return yscore_stats   (v_hand, a_label, '-', 1);
+}
+
+uchar        /*--> return current value --------------------------------------*/
+ySCORE_stats_value      (void *v_hand, char a_label [LEN_TERSE])
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   tySCORE    *x_hand      = NULL;
+   tySCORE_TB *x_table     = NULL;
+   short       n           =   -1;
+   /*---(header)-------------------------*/
+   DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
+   /*---(return)-------------------------*/
+   rc = yscore_structs (v_hand, &x_hand, &x_table, NULL);
+   DEBUG_YSCORE   yLOG_value   ("structs"   , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(position)-----------------------*/
+   rc = yscore_pos (x_table, 0, a_label, &n, NULL, NULL, NULL, NULL);
+   DEBUG_YSCORE   yLOG_value   ("pos"       , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_YSCORE    yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   DEBUG_YSCORE   yLOG_value   ("n"         , n);
+   /*---(set value)----------------------*/
+   rc = gySCORE_stats [n];
+   DEBUG_YSCORE   yLOG_value   ("rc"        , rc);
+   /*---(complete)-----------------------*/
+   DEBUG_YSCORE    yLOG_exit    (__FUNCTION__);
+   return rc;
 }
 
 char         /*--> set all values back to table defaults ---------------------*/

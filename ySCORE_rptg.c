@@ -3,6 +3,37 @@
 #include    "ySCORE_priv.h"
 
 
+
+/*===[[ GNU GENERAL PUBLIC LICENSE (GPL) ]]===================================*/
+/*´´·········1·········2·········3·········4·········5·········6·········7·········8  */
+
+#define  P_COPYRIGHT   \
+   "copyright (c) 2025 robert.s.heatherly at balsashrike at gmail dot com"
+
+#define  P_LICENSE     \
+   "the only place you could have gotten this code is my github, my website,¦"   \
+   "or illegal sharing. given that, you should be aware that this is GPL licensed."
+
+#define  P_COPYLEFT    \
+   "the GPL COPYLEFT REQUIREMENT means any modifications or derivative works¦"   \
+   "must be released under the same GPL license, i.e, must be free and open."
+
+#define  P_INCLUDE     \
+   "the GPL DOCUMENTATION REQUIREMENT means that you must include the original¦" \
+   "copyright notice and the full licence text with any resulting anything."
+
+#define  P_AS_IS       \
+   "the GPL NO WARRANTY CLAUSE means the software is provided without any¦"      \
+   "warranty and the author cannot be held liable for damages."
+
+#define  P_THEFT    \
+   "if you knowingly violate the spirit of these ideas, i suspect you might¦"    \
+   "find any number of freedom-minded hackers may take it quite personally ;)"
+
+/*´´·········1·········2·········3·········4·········5·········6·········7·········8  */
+/*===[[ GNU GENERAL PUBLIC LICENSE (GPL) ]]===================================*/
+
+
 char*
 yscore_output           (tySCORE *a_hand, char a_which)
 {
@@ -84,6 +115,7 @@ yscore__title           (tySCORE *a_hand, tySCORE_TB *a_table, char a_type)
    /*---(create)-------------------------*/
    --rce;  for (i = 0; i < LEN_FULL; ++i) {
       /*---(test for end)----------------*/
+      if (a_table [i].s_shown != 'Ï')  continue;
       if (strncmp (a_table [i].s_label, "end-", 4) == 0) {
          DEBUG_YSCORE   yLOG_note    ("hit end-list");
          if (strchr ("² ", g_print [x_max - 1]) != NULL)  g_print [x_max - 1] = '‚';
@@ -189,6 +221,7 @@ yscore__header          (tySCORE_TB *a_table, char n)
    for (i = 0; i < LEN_FULL; ++i) {
       /*---(test for end)----------------*/
       if (strncmp (a_table [i].s_label, "end-", 4) == 0)  break;
+      if (a_table [i].s_shown != 'Ï')  continue;
       /*---(prepare)---------------------*/
       l = strlen (a_table [i].s_print);
       DEBUG_YSCORE   yLOG_complex ("item"      , "%3d, %c/%3d, %2då%sæ", i, a_table [i].s_sample, a_table [i].s_sample, l, a_table [i].s_print);
@@ -245,6 +278,7 @@ yscore__legend_bounds   (tySCORE_TB *a_table, char a_section [LEN_TERSE], short 
    short       x_beg       =   -1;
    short       x_end       =   -1;
    short       x_cnt       =    0;
+   short       x_skip      =    0;
    uchar       x_samp      =  '-';
    /*---(header)-------------------------*/
    DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
@@ -275,6 +309,7 @@ yscore__legend_bounds   (tySCORE_TB *a_table, char a_section [LEN_TERSE], short 
    /*---(find bounds)--------------------*/
    --rce;  for (i = 0; i < LEN_FULL; ++i) {
       DEBUG_YSCORE   yLOG_complex ("line"      , "%3d, %-9.9s, %c/%4d", i, a_table [i].s_label, ychrvisible (a_table [i].s_sample), a_table [i].s_sample);
+      if (a_table [i].s_shown != 'Ï') { ++x_skip;  continue; }
       /*---(test for end-list)-----------*/
       if (strncmp (a_table [i].s_label, "end-", 4) == 0) {
          x_end = i - 1;
@@ -285,18 +320,20 @@ yscore__legend_bounds   (tySCORE_TB *a_table, char a_section [LEN_TERSE], short 
          x_head = i;
          DEBUG_YSCORE   yLOG_value   ("x_head"    , x_head);
          x_beg  = i + 1;
+         while (a_table [x_beg].s_shown != 'Ï')  ++x_beg;
          DEBUG_YSCORE   yLOG_value   ("x_beg"     , x_beg);
       }
       if (x_beg < 0)  continue;
       /*---(find end)--------------------*/
       if (a_table [i].s_sample == 3) {
          x_end = i - 1;
+         while (a_table [x_end].s_shown != 'Ï')  --x_end;
          DEBUG_YSCORE   yLOG_value   ("x_end"     , x_end);
       }
       if (x_end > 0)  break;
       /*---(count)-----------------------*/
       x_samp = a_table [i].s_sample;
-      if (x_samp > 3)  ++x_cnt;
+      if (x_samp > 3 && a_table [i].s_shown == 'Ï')  ++x_cnt;
       /*---(done)------------------------*/
    }
    /*---(check for trouble)--------------*/
@@ -318,7 +355,7 @@ yscore__legend_bounds   (tySCORE_TB *a_table, char a_section [LEN_TERSE], short 
    if (r_beg  != NULL)  *r_beg   = x_beg;
    if (r_end  != NULL)  *r_end   = x_end;
    if (r_cnt  != NULL)  *r_cnt   = x_cnt;
-   if (r_npre != NULL)  *r_npre  = (x_end - x_beg) + 1 + 4 + 3;  /* 4 for section label, 3 more for marker */
+   if (r_npre != NULL)  *r_npre  = (x_end - x_beg) - x_skip + 1 + 4 + 3;  /* 4 for section label, 3 more for marker */
    /*---(complete)-----------------------*/
    DEBUG_YSCORE    yLOG_exit    (__FUNCTION__);
    return 1;
@@ -396,6 +433,7 @@ yscore__legend_lead     (tySCORE_TB *a_table, short a_beg, short a_cur, short a_
    DEBUG_YSCORE   yLOG_complex ("marks"     , "corner=%s  horz=%s  mark=%s", x_corner, x_horz, x_mark);
    /*---(run list)-----------------------*/
    for (i = a_beg; i <= a_end; ++i) {
+      if (a_table [i].s_shown != 'Ï')  continue;
       /*---(get data)--------------------*/
       x_prev = a_table [i - 1].s_sample;
       x_samp = a_table [i].s_sample;
@@ -510,13 +548,13 @@ yscore__legend_full     (tySCORE_TB *a_table, char a_section [LEN_TERSE], char a
       break;
    case YDLST_NEXT  : case YDLST_BNEXT :
       ++x_cur;
-      if (x_cur < x_max && a_table [x_cur].s_sample == 1) ++x_cur;
+      while (x_cur < x_max  && (a_table [x_cur].s_sample == 1 || a_table [x_cur].s_shown != 'Ï')) ++x_cur;
       break;
    case YDLST_CURR  : case YDLST_LUSED :
       break;
    case YDLST_PREV  : case YDLST_BPREV :
       --x_cur;
-      if (x_cur > x_head && a_table [x_cur].s_sample == 1) --x_cur;
+      while (x_cur > x_head && (a_table [x_cur].s_sample == 1 || a_table [x_cur].s_shown != 'Ï')) --x_cur;
       break;
    case YDLST_TAIL  : case YDLST_BOTT  :
       x_cur = x_max;
@@ -551,6 +589,7 @@ yscore__legend_full     (tySCORE_TB *a_table, char a_section [LEN_TERSE], char a
    /*---(footer)-------------------------*/
    if (x_cur == x_max) {
       for (i = x_head; i <= x_end; ++i) {
+         if (a_table [i].s_shown != 'Ï')  continue;
          x_samp = a_table [i].s_sample;
          sprintf (t, "%c", x_samp);
          switch (x_samp) {
@@ -578,6 +617,12 @@ yscore__legend_full     (tySCORE_TB *a_table, char a_section [LEN_TERSE], char a
    }
    /*---(contatinate)--------------------*/
    sprintf (g_print, "%s%s", x_lead, x_detail);
+   /*---(put-count)----------------------*/
+   if (x_cur == x_beg) {
+      sprintf (t, "%2d", x_cnt);
+      g_print [1] = t [0];
+      g_print [2] = t [1];
+   }
    /*---(complete)-----------------------*/
    DEBUG_YSCORE    yLOG_exit    (__FUNCTION__);
    return g_print;
@@ -661,6 +706,7 @@ yscore__legend_OLD      (tySCORE_TB *a_table, char a_line, char a_label [LEN_TER
    if (a_line > 0 && a_line <= x_cnt) {
       x_pos = x_cnt;
       for (i = x_beg; i <= x_end; ++i) {
+         if (a_table [i].s_shown != 'Ï')  continue;
          x_samp = a_table [i].s_sample;
          if (x_samp > 3) {
             if (a_line == x_pos) {
@@ -683,6 +729,7 @@ yscore__legend_OLD      (tySCORE_TB *a_table, char a_line, char a_label [LEN_TER
    /*---(display)------------------------*/
    if (a_line == 0) {
       for (i = x_beg; i <= x_end; ++i) {
+         if (a_table [i].s_shown != 'Ï')  continue;
          x_samp = a_table [i].s_sample;
          sprintf (t, "%c", x_samp);
          switch (x_samp) {
@@ -699,6 +746,7 @@ yscore__legend_OLD      (tySCORE_TB *a_table, char a_line, char a_label [LEN_TER
    if (a_line == x_cnt + 1) {
       c = 0;
       for (i = x_beg; i <= x_end; ++i) {
+         if (a_table [i].s_shown != 'Ï')  continue;
          x_samp = a_table [i].s_sample;
          switch (x_samp) {
          case  0 :  c += 4; break;

@@ -8,7 +8,7 @@ SCRP  [0a/·]  (MARK) verify expanding validity strings                         
    local      create working variable              - - - - - - - - - - - - -   char        x_valid [LEN_HUND]  = "";                                                                                                                                                                                      
 
    COND       prepare for run                                                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
-     exec     prepare for testing                  yscore_unit_quiet                                                                                                                 z_equal     0                                                                                                    
+     exec     prepare for testing                  yscore__unit_quiet                                                                                                                z_equal     0                                                                                                    
      exec     send messages and errors to tmp      yURG_all_tmp                                                                                                                      z_equal     0                                                                                                    
 
    COND       verify quick success on empty                                      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
@@ -52,7 +52,7 @@ SCRP  [0a/·]  (MARK) verify expanding validity strings                         
      echo     ... check expanded                   - - - - - - - - - - - - -   x_valid                                                                                               w_equal     å·°-nslcæ                                                                                                
 
    COND       end the test                                                       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.010))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
-     exec     wrap up testing                      yscore_unit_end                                                                                                                   z_equal     0                                                                                                    
+     exec     wrap up testing                      yscore__unit_end                                                                                                                  z_equal     0                                                                                                    
 
 
 
@@ -61,7 +61,7 @@ SCRP  [0a/·]  (MARK) verify expanding validity strings                         
 SCRP  [1a/·]  (MARK) verify validating marks while setting                        0s  valid           yscore_mark, ySCORE_mark, yscore_value, ySCORE_value                         ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
 
    COND       prepare for run                                                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
-     exec     prepare for testing                  yscore_unit_quiet                                                                                                                 z_equal     0                                                                                                    
+     exec     prepare for testing                  yscore__unit_quiet                                                                                                                z_equal     0                                                                                                    
      exec     send messages and errors to tmp      yURG_all_tmp                                                                                                                      z_equal     0                                                                                                    
 
    COND       verify setting to testing table                                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
@@ -137,7 +137,7 @@ SCRP  [1a/·]  (MARK) verify validating marks while setting                     
      exec     get score                            ySCORE_value                u_score     , "NCONF"                                                                                 c_equal     '¤'                                                                                                  
 
    COND       end the test                                                       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.010))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
-     exec     wrap up testing                      yscore_unit_end                                                                                                                   z_equal     0                                                                                                    
+     exec     wrap up testing                      yscore__unit_end                                                                                                                  z_equal     0                                                                                                    
 
 
 
@@ -147,7 +147,7 @@ SCRP  [1a/·]  (MARK) verify validating marks while setting                     
 SCRP  [1b/·]  (MARK) verify setting and getting various marks                     0s  marks           yscore_mark, ySCORE_mark, yscore_value, ySCORE_value                         ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
 
    COND       prepare for run                                                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
-     exec     prepare for testing                  yscore_unit_quiet                                                                                                                 z_equal     0                                                                                                    
+     exec     prepare for testing                  yscore__unit_quiet                                                                                                                z_equal     0                                                                                                    
 
    COND       verify setting to testing table                                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
      exec     call init                            ySCORE_init                 mySCORE_test    , 'y'  , &u_score                                                                     z_equal     1                                                                                                    
@@ -230,7 +230,7 @@ SCRP  [1b/·]  (MARK) verify setting and getting various marks                  
      exec     get score                            ySCORE_value                u_score     , "NCONF"                                                                                 c_equal     '¤'                                                                                                  
 
    COND       end the test                                                       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.010))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
-     exec     wrap up testing                      yscore_unit_end                                                                                                                   z_equal     0                                                                                                    
+     exec     wrap up testing                      yscore__unit_end                                                                                                                  z_equal     0                                                                                                    
 
 
 
@@ -240,7 +240,7 @@ SCRP  [1b/·]  (MARK) verify setting and getting various marks                  
 SCRP  [0a/·]  (MARK) verify masking ranges                                        0s  mask            ySCORE_mask                                                                  ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
 
    COND       prepare for run                                                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
-     exec     prepare for testing                  yscore_unit_quiet                                                                                                                 z_equal     0                                                                                                    
+     exec     prepare for testing                  yscore__unit_quiet                                                                                                                z_equal     0                                                                                                    
 
    COND       verify setting to testing table                                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
      exec     call init                            ySCORE_init                 mySCORE_test    , 'y'  , &u_score                                                                     z_equal     1                                                                                                    
@@ -310,7 +310,7 @@ SCRP  [0a/·]  (MARK) verify masking ranges                                     
      echo     ... check table pointer              - - - - - - - - - - - - -   u_score                                                                                               p_null      0                                                                                                    
 
    COND       end the test                                                       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.010))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
-     exec     wrap up testing                      yscore_unit_end                                                                                                                   z_equal     0                                                                                                    
+     exec     wrap up testing                      yscore__unit_end                                                                                                                  z_equal     0                                                                                                    
 
 
 
@@ -319,7 +319,7 @@ SCRP  [0a/·]  (MARK) verify masking ranges                                     
 SCRP  [1b/·]  (MARK) verify setting specialty marks                               0s  special         ySCORE_exists, ySCORE_flag, ySCORE_exact, ySCORE_scaled, ySCORE_percent      ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
 
    COND       prepare for run                                                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
-     exec     prepare for testing                  yscore_unit_quiet                                                                                                                 z_equal     0                                                                                                    
+     exec     prepare for testing                  yscore__unit_quiet                                                                                                                z_equal     0                                                                                                    
 
    COND       verify setting to testing table (non-validated)                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
      exec     call init                            ySCORE_init                 mySCORE_test    , '-'  , &u_score                                                                     z_equal     1                                                                                                    
@@ -424,6 +424,6 @@ SCRP  [1b/·]  (MARK) verify setting specialty marks                            
      echo     ... check table pointer              - - - - - - - - - - - - -   u_score                                                                                               p_null      0                                                                                                    
 
    COND       end the test                                                       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.010))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
-     exec     wrap up testing                      yscore_unit_end                                                                                                                   z_equal     0                                                                                                    
+     exec     wrap up testing                      yscore__unit_end                                                                                                                  z_equal     0                                                                                                    
 
 

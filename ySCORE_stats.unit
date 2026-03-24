@@ -6,7 +6,7 @@
 SCRP  [0a/·]  (STATS) verify clearing the table                                   0s  clear           ySCORE_stats_clear                                                           ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
 
    COND       prepare for run                                                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
-     exec     prepare for testing                  yscore_unit_quiet                                                                                                                 z_equal     0                                                                                                    
+     exec     prepare for testing                  yscore__unit_quiet                                                                                                                z_equal     0                                                                                                    
 
    COND       verify setting to testing table (non-validated)                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
      exec     call init                            ySCORE_init                 mySCORE_test    , '-'  , &u_score                                                                     z_equal     1                                                                                                    
@@ -19,7 +19,7 @@ SCRP  [0a/·]  (STATS) verify clearing the table                                
      exec     call wrap                            ySCORE_wrap                 &u_score                                                                                              z_equal     1                                                                                                    
 
    COND       verify default                                                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.009))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
-     exec     clear score                          yscore_unit_end                                                                                                                   z_equal     0                                                                                                    
+     exec     clear score                          yscore__unit_end                                                                                                                  z_equal     0                                                                                                    
 
 
 
@@ -28,7 +28,7 @@ SCRP  [0a/·]  (STATS) verify clearing the table                                
 SCRP  [0a/·]  (STATS) verify setting table                                        0s  set             ySCORE_stats_set                                                             ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
 
    COND       prepare for run                                                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
-     exec     prepare for testing                  yscore_unit_quiet                                                                                                                 z_equal     0                                                                                                    
+     exec     prepare for testing                  yscore__unit_quiet                                                                                                                z_equal     0                                                                                                    
 
    COND       verify setting to testing table (non-validated)                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
      exec     call init                            ySCORE_init                 mySCORE_test    , '-'  , &u_score                                                                     z_equal     1                                                                                                    
@@ -49,6 +49,6 @@ SCRP  [0a/·]  (STATS) verify setting table                                     
      exec     call wrap                            ySCORE_wrap                 &u_score                                                                                              z_equal     1                                                                                                    
 
    COND       verify default                                                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.009))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
-     exec     clear score                          yscore_unit_end                                                                                                                   z_equal     0                                                                                                    
+     exec     clear score                          yscore__unit_end                                                                                                                  z_equal     0                                                                                                    
 
 
