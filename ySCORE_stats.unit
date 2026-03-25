@@ -43,7 +43,7 @@ SCRP  [0a/·]  (STATS) verify setting table                                     
      get      ... check stats                      ySCORE_stats_show           u_score                                                                                               w_equal     å>··°·´··´····´··´- >·´···´··´··´····´- > æ
 
    COND       attempt null handler                                               - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.007))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
-     exec     call set                             ySCORE_stats_set            NULL            , "NFILE"       ,  100                                                                z_lesser    0                                                                                                    
+     exec     call set                             ySCORE_stats_set            NULL            , "NFILE"       ,  100                                                                z_lesser    1                                                                                                    
      get      ... check stats                      ySCORE_stats_show           u_score                                                                                               w_equal     å>··°·´··´····´··´- >·´···´··´··´····´- > æ
 
    COND       verify updating value                                              - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.007))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  

@@ -159,11 +159,13 @@ yscore_pos              (tySCORE_TB *a_table, short a_max, char a_label [LEN_TER
          break;
       }
       /*---(accumulate)------------------*/
-      rc = yscore_pos__next (i, a_table [i].s_sample, &t, &s, &r, &p);
-      DEBUG_YSCORE   yLOG_value   ("next"      , rc);
-      if (rc < 0) {
-         DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
-         return rce;
+      if (a_table [i].s_shown == 'Ï') {
+         rc = yscore_pos__next (i, a_table [i].s_sample, &t, &s, &r, &p);
+         DEBUG_YSCORE   yLOG_value   ("next"      , rc);
+         if (rc < 0) {
+            DEBUG_YSCORE   yLOG_exitr   (__FUNCTION__, rce);
+            return rce;
+         }
       }
       /*---(done)------------------------*/
    }
@@ -177,6 +179,13 @@ yscore_pos              (tySCORE_TB *a_table, short a_max, char a_label [LEN_TER
       yURG_err ('w', "ySCORE, scoring pos called, but label å%sæ does not exist in scoring table", a_label);
       DEBUG_YSCORE    yLOG_exitr   (__FUNCTION__, rce);
       return rce;
+   }
+   /*---(check if shown)-----------------*/
+   DEBUG_YSCORE   yLOG_value   ("shown"     , a_table [i].s_shown);
+   if (a_table [i].s_shown != 'Ï') {
+      if (r_index != NULL)  *r_index = i;
+      DEBUG_YSCORE    yLOG_exit    (__FUNCTION__);
+      return 0;
    }
    /*---(save-back)----------------------*/
    if (r_index != NULL)  *r_index = i;

@@ -69,8 +69,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "2.--, production"
 #define     P_VERMINOR  "2.1-, integrate into yJOBS and others"
-#define     P_VERNUM    "2.1h"
-#define     P_VERTXT    "updated unit-testing for ySCORE_stats"
+#define     P_VERNUM    "2.1i"
+#define     P_VERTXT    "updated ySCORE_stats to complete polymnia string testing"
 /*········· ··········· ´·····························´········································*/
 #define     P_PRIORITY  "direct, simple, brief, vigorous, and lucid (h.w. fowler)"
 #define     P_PRINCIPAL "[grow a set] and build your wings on the way down (r. bradbury)"

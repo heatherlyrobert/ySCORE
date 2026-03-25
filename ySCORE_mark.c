@@ -256,7 +256,9 @@ yscore_value            (tySCORE_TB *a_table, char a_label [LEN_TERSE], char a_s
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
+   short       n           =   -1;
    short       s           =   -1;
+   char        x_shown     =  '-';
    uchar       x_value     =  '-';
    /*---(header)-------------------------*/
    DEBUG_YSCORE   yLOG_enter   (__FUNCTION__);
@@ -273,13 +275,20 @@ yscore_value            (tySCORE_TB *a_table, char a_label [LEN_TERSE], char a_s
       return '¤';
    }
    /*---(position)-----------------------*/
-   rc = yscore_pos (a_table, 0, a_label, NULL, NULL, &s, NULL, NULL);
+   rc = yscore_pos (a_table, 0, a_label, &n, NULL, &s, NULL, NULL);
    DEBUG_YSCORE   yLOG_value   ("pos"       , rc);
    --rce;  if (rc < 0) {
       DEBUG_YSCORE    yLOG_exitr   (__FUNCTION__, rce);
       return '¤';
    }
    DEBUG_YSCORE   yLOG_value   ("s"         , s);
+   /*---(check invisible)----------------*/
+   x_shown = a_table [n].s_shown;
+   DEBUG_YSCORE   yLOG_char    ("x_shown"   , x_shown);
+   --rce;  if (x_shown != 'Ï') {
+      DEBUG_YSCORE    yLOG_exitr   (__FUNCTION__, rce);
+      return '¤';
+   }
    /*---(value)--------------------------*/
    x_value = a_score [s];
    DEBUG_YSCORE   yLOG_value   ("x_value"   , x_value);
