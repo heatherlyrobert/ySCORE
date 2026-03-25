@@ -37,8 +37,8 @@ SCRP  [0a/·]  (AUDIT) verify auditing sample                                   
    COND       end of test                                                        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.006))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
      exec     wrap up testing                      yscore__unit_end                                                                                                                  z_equal     0                                                                                                    
 
-   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT======real====vars====void====skip===DITTO====real====void====skip   
-   PRCS       script statistics -----------------------------------------------   1     1     0     0     1     6     6     0  ´·········     0  ·                        0  ·                        0    18    17     0     1     0     0     0     0     0   
+   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT========real=====vars=====void=====skip====DITTO=====real=====void=====skip
+   PRCS       script statistics -----------------------------------------------   1     1     0     0     1     6     6     0  ´·········     0  ·                        0  ·                        0     18     17      0      1      0      0      0      0      0   
 
 
 
@@ -81,8 +81,8 @@ SCRP  [0a/·]  (AUDIT) verify auditing defaults                                 
    COND       end of test                                                        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.006))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
      exec     wrap up testing                      yscore__unit_end                                                                                                                  z_equal     0                                                                                                    
 
-   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT======real====vars====void====skip===DITTO====real====void====skip   
-   PRCS       script statistics -----------------------------------------------   2     1     0     0     1     6     6     0  ··········     0  ·                        0  ·                        0    23    23     0     0     0     0     0     0     0   
+   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT========real=====vars=====void=====skip====DITTO=====real=====void=====skip
+   PRCS       script statistics -----------------------------------------------   2     1     0     0     1     6     6     0  ··········     0  ·                        0  ·                        0     23     23      0      0      0      0      0      0      0   
 
 
 
@@ -241,8 +241,8 @@ SCRP  [0a/·]  (AUDIT) verify auditing labels                                   
    COND       end of test                                                        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.041))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
      exec     wrap up testing                      yscore__unit_end                                                                                                                  z_equal     0                                                                                                    
 
-   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT======real====vars====void====skip===DITTO====real====void====skip   
-   PRCS       script statistics -----------------------------------------------   3     1     0     0     1    41    22    19  *·········     0  ·                        0  ·                        0    69    54     0    15     0    19     0    19     0   
+   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT========real=====vars=====void=====skip====DITTO=====real=====void=====skip
+   PRCS       script statistics -----------------------------------------------   3     1     0     0     1    41    22    19  *·········     0  ·                        0  ·                        0     69     54      0     15      0     19      0     19      0   
 
 
 
@@ -290,8 +290,8 @@ SCRP  [0a/·]  (AUDIT) verify auditing prints                                   
    COND       end of test                                                        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((04.010))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
      exec     wrap up testing                      yscore__unit_end                                                                                                                  z_equal     0                                                                                                    
 
-   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT======real====vars====void====skip===DITTO====real====void====skip   
-   PRCS       script statistics -----------------------------------------------   4     1     0     0     1    10    10     0  ··········     0  ·                        0  ·                        0    20    20     0     0     0     0     0     0     0   
+   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT========real=====vars=====void=====skip====DITTO=====real=====void=====skip
+   PRCS       script statistics -----------------------------------------------   4     1     0     0     1    10    10     0  ··········     0  ·                        0  ·                        0     20     20      0      0      0      0      0      0      0   
 
 
 
@@ -347,8 +347,8 @@ SCRP  [1a/·]  (AUDIT) verify auditing lines                                    
    COND       end of test                                                        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((05.011))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
      exec     wrap up testing                      yscore__unit_end                                                                                                                  z_equal     0                                                                                                    
 
-   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT======real====vars====void====skip===DITTO====real====void====skip   
-   PRCS       script statistics -----------------------------------------------   5     1     0     0     1    11    11     0  ··········     0  ·                        0  ·                        0    26    26     0     0     0     0     0     0     0   
+   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT========real=====vars=====void=====skip====DITTO=====real=====void=====skip
+   PRCS       script statistics -----------------------------------------------   5     1     0     0     1    11    11     0  ··········     0  ·                        0  ·                        0     26     26      0      0      0      0      0      0      0   
 
 
 
@@ -443,13 +443,13 @@ SCRP  [1b/·]  (AUDIT) verify full table audit                                  
    COND       end of test                                                        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((06.013))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
      exec     wrap up testing                      yscore__unit_end                                                                                                                  z_equal     0                                                                                                    
 
-   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT======real====vars====void====skip===DITTO====real====void====skip   
-   PRCS       script statistics -----------------------------------------------   6     1     0     0     1    13     9     4  31········     0  ·                        0  ·                        0    61    56     0     5     0    13     6     7     0   
+   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT========real=====vars=====void=====skip====DITTO=====real=====void=====skip
+   PRCS       script statistics -----------------------------------------------   6     1     0     0     1    13     9     4  31········     0  ·                        0  ·                        0     61     56      0      5      0     13      6      7      0   
 
 
 
-#===========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT======real====vars====void====skip===DITTO====real====void====skip   
-TINU          final unit test statistics --------------------------------------   -     6     0     0     6    87    64    23  ··········     0  ·                        0  ·                        0   217   196     0    21     0    32     6    26     0   
+#===========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT========real=====vars=====void=====skip====DITTO=====real=====void=====skip
+TINU          final unit test statistics --------------------------------------   -     6     0     0     6    87    64    23  ··········     0  ·                        0  ·                        0    217    196      0     21      0     32      6     26      0   
 
 
 

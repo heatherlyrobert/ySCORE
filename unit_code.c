@@ -39,7 +39,7 @@ const tySCORE_TB mySCORE_test [LEN_FULL] = {
    { 'Ï' , "NCONF"    , '·' , 'c' , "conf"     , "naming²standard²applied"          , '·' , '·' , "·°-nslc"         , "°) illegal   -) wild      n) normal    s) standard  l) local     c) central"               }, 
    { 'Ï' , "NDIR"     , '·' , 'd' , "dir"      , "directory²requested"              , '·' , '·' , "·°£/D"           , "°) null      £) empty     /) pathless  D) passed"                                          },
    { 'Ï' , "NFILE"    , '·' , 'f' , "file"     , "file²name²requested"              , '·' , '·' , "·°£/F-"          , "°) null      £) empty     /) pathed    F) passed    -) skipped"                            },
-   { '>' , "NEXTRA"   , '·' , '-' , "extra"    , "just a hidden line"               , '·' , '·' , "·°£/F-"          , "°) null      £) empty     /) pathed    F) passed    -) skipped"                            },
+   { '>' , "NEXTRA"   , '·' , '-' , "extra"    , "just a hidden line"               , '·' , '·' , "·°abcdef"        , "°) null      £) empty     /) pathed    F) passed    -) skipped"                            },
    { 'Ï' , " "        , '´' ,  1  , ""         , ""                                 , ' ' , ' ' , ""                , ""                                                                                          },
    /*--label----- def-- samp- print------- description------------------------- style check valid-------------- legend------ ------------ ------------ ------------ ------------ ------------ ------------   */
    { 'Ï' , "NFULL"    , '·' , 'n' , "full"     , "name²quality²checking"            , '·' , '·' , "·°/´¢n"          , "°) null      /) not abs   ´) hidden    ¢) bad char  n) passed"                             },

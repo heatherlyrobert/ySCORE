@@ -83,6 +83,8 @@ yscore_pos_next         (tySCORE_TB *a_table, char a_type, short n, short *r_pos
    char        rce         =  -10;
    /*---(defense)------------------------*/
    --rce;  if (a_table == NULL)  return rce;
+   /*---(cut hidden)---------------------*/
+   if (a_table [n].s_shown != 'Ï')  return 0;
    /*---(next)---------------------------*/
    --rce;  switch (a_type) {
    case 't' :  return yscore_pos__next (n, a_table [n].s_sample, r_pos, NULL , NULL , NULL );  break;
@@ -150,7 +152,6 @@ yscore_pos              (tySCORE_TB *a_table, short a_max, char a_label [LEN_TER
          DEBUG_YSCORE   yLOG_note    ("hit end of table sentinel");
          break;
       }
-      if (a_table [i].s_shown != 'Ï')  continue;
       /*---(drop-out)--------------------*/
       if (strcmp (a_table [i].s_label, a_label) == 0) {
          DEBUG_YSCORE   yLOG_value   ("FOUND"     , i);
